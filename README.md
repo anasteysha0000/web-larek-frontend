@@ -129,8 +129,7 @@ enum AppStateModals {
   postOrder = 'modal:postOrder',
 }
 ```
-
-\#\#\#\#\# `AppStateChanges`
+ `AppStateChanges`
 
 Перечисление, описывающее возможные изменения состояния приложения\.
 
@@ -145,7 +144,7 @@ export enum AppStateChanges {
 }
 ```
 
-\#\#\#\#\# `AppState`
+`AppState`
 
 Интерфейс, описывающий состояние приложения\.
 
@@ -177,7 +176,7 @@ export interface AppState {
 }
 ```
 
-\#\#\#\#\# `ApiListResponse<Type>`
+`ApiListResponse<Type>`
 
 Тип, представляющий ответ API со списком элементов\.
 
@@ -188,7 +187,7 @@ export type ApiListResponse<Type> = {
 };
 ```
 
-\#\#\#\#\# `ApiPostMethods`
+`ApiPostMethods`
 
 Тип, представляющий методы HTTP\-запросов для изменения данных\.
 
@@ -196,7 +195,7 @@ export type ApiListResponse<Type> = {
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 ```
 
-\#\#\#\#\# `IPostOrder`
+`IPostOrder`
 
 Интерфейс, описывающий ответ API при создании заказа\.
 
@@ -207,7 +206,7 @@ export interface IPostOrder {
 }
 ```
 
-\#\#\#\#\# `IWebLarekApi`
+`IWebLarekApi`
 
 Интерфейс, описывающий методы API\.
 
@@ -219,7 +218,7 @@ export interface IWebLarekApi {
 }
 ```
 
-\#\#\# Описание методов интерфейса `AppState`
+ Описание методов интерфейса `AppState`
 
 \- \*\*`selectProduct(id: string): void`\*\*
   
@@ -245,9 +244,6 @@ export interface IWebLarekApi {
   
   Метод для установки сообщения в модальном окне и флага ошибки\.
 
-\#\
-
-ChatGPT 4 & Midjourney | AI bot, [14.07.2024 15:15]
 #\# Описание методов интерфейса `IWebLarekApi`
 
 \- \*\*`getProductList(): Promise<ApiListResponse<IProduct>>`\*\*
