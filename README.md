@@ -92,7 +92,7 @@ export interface IBasket {
 }
 ```
 
-\#\#\#\#\# `IContacts`
+ `IContacts`
 
 Интерфейс, описывающий контактную информацию\.
 
@@ -103,7 +103,7 @@ interface IContacts {
 }
 ```
 
-\#\#\#\#\# `IOrder`
+ `IOrder`
 
 Интерфейс, описывающий заказ\. Наследует `IContacts`\.
 
@@ -116,7 +116,7 @@ interface IOrder extends IContacts {
 }
 ```
 
-\#\#\#\#\# `AppStateModals`
+ `AppStateModals`
 
 Перечисление, описывающее возможные модальные окна в приложении\.
 
