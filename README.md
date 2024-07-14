@@ -40,11 +40,11 @@ npm run build
 ```
 yarn build
 ```
-\#\#\# Документация по API и состоянию приложения
+ Документация по API и состоянию приложения
 
-\#\#\#\# Типы и интерфейсы
+Типы и интерфейсы
 
-\#\#\#\#\# `ProductCategory`
+ `ProductCategory`
 
 Тип, представляющий категории продуктов\.
 
@@ -57,7 +57,7 @@ export type ProductCategory =
   | 'другое';
 ```
 
-\#\#\#\#\# `ProductPayment`
+ `ProductPayment`
 
 Тип, представляющий способы оплаты\.
 
@@ -66,7 +66,7 @@ export type ProductPayment =
   | 'online' | 'cash';
 ```
 
-\#\#\#\#\# `IProduct`
+`IProduct`
 
 Интерфейс, описывающий продукт\.
 
@@ -81,7 +81,7 @@ export interface IProduct {
 }
 ```
 
-\#\#\#\#\# `IBasket`
+`IBasket`
 
 Интерфейс, описывающий корзину покупок\.
 
@@ -92,7 +92,7 @@ export interface IBasket {
 }
 ```
 
- `IContacts`
+`IContacts`
 
 Интерфейс, описывающий контактную информацию\.
 
