@@ -13,18 +13,18 @@ export interface IBasket {
 	itemsBasket: [IProduct, string, number][];
 	totalBasket: number | null;
 }
-interface IContacts {
+export interface IContacts {
 	email: string;
 	phone: string;
 }
-interface IOrder extends IContacts {
+export interface IOrder extends IContacts {
 	payment: ProductPayment;
 	address: string;
 	total: number | null;
 	items: string[];
 }
 // Какие модальные окна у нас есть
-enum AppStateModals {
+export enum AppStateModals {
 	product = 'modal:product',
 	basket = 'modal:basket',
 	payment = 'modal:payment',
