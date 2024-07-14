@@ -220,66 +220,41 @@ export interface IWebLarekApi {
 
  Описание методов интерфейса `AppState`
 
-\- \*\*`selectProduct(id: string): void`\*\*
+`selectProduct(id: string): void`
   
   Метод для выбора продукта по его идентификатору\.
   
-\- \*\*`openBasket(): void`\*\*
+`openBasket(): void`
   
   Метод для открытия корзины\.
   
-\- \*\*`buyProduct(id: string): void`\*\*
+`buyProduct(id: string): void`
   
   Метод для добавления продукта в корзину по его идентификатору\.
   
-\- \*\*`deleteProduct(id: string): void`\*\*
+`deleteProduct(id: string): void`
   
   Метод для удаления продукта из корзины по его идентификатору\.
   
-\- \*\*`openModal(modal: AppStateModals): void`\*\*
+`openModal(modal: AppStateModals): void`
   
   Метод для открытия модального окна\.
   
-\- \*\*`setMessage(message: string | null, isError: boolean): void`\*\*
+`setMessage(message: string | null, isError: boolean): void`
   
   Метод для установки сообщения в модальном окне и флага ошибки\.
 
-#\# Описание методов интерфейса `IWebLarekApi`
+Описание методов интерфейса `IWebLarekApi`
 
-\- \*\*`getProductList(): Promise<ApiListResponse<IProduct>>`\*\*
+`getProductList(): Promise<ApiListResponse<IProduct>>`
   
   Метод для получения списка продуктов\.
   
-\- \*\*`getProductItem(): Promise<IProduct>`\*\*
+`getProductItem(): Promise<IProduct>`
   
   Метод для получения информации о конкретном продукте\.
   
-\- \*\*`postOrder(): Promise<IPostOrder>`\*\*
+`postOrder(): Promise<IPostOrder>`
   
   Метод для создания заказа\.
 
-\#\#\# Пример использования
-
-Пример использования интерфейсов и типов в приложении:
-
-```typescript
-import { AppState, AppStateModals, IWebLarekApi } from './App';
-
-// Реализация класса, использующего интерфейсы и типы
-class App implements AppState {
-    // ... реализация свойств и методов ...
-}
-
-// Пример использования API
-const api: IWebLarekApi = {
-    async getProductList() {
-        // Реализация запроса на получение списка продуктов
-    },
-    async getProductItem() {
-        // Реализация запроса на получение информации о продукте
-    },
-    async postOrder() {
-        // Реализация запроса на создание заказа
-    }
-};
-```
