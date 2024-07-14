@@ -220,41 +220,41 @@ export interface IWebLarekApi {
 
  Описание методов интерфейса `AppState`
 
-`selectProduct(id: string): void`
+- `selectProduct(id: string): void`
   
-  Метод для выбора продукта по его идентификатору\.
+  - Метод для выбора продукта по его идентификатору\.
   
-`openBasket(): void`
+- `openBasket(): void`
   
-  Метод для открытия корзины\.
+  - Метод для открытия корзины\.
   
-`buyProduct(id: string): void`
+- `buyProduct(id: string): void`
   
-  Метод для добавления продукта в корзину по его идентификатору\.
+  - Метод для добавления продукта в корзину по его идентификатору\.
   
-`deleteProduct(id: string): void`
+- `deleteProduct(id: string): void`
   
-  Метод для удаления продукта из корзины по его идентификатору\.
+  - Метод для удаления продукта из корзины по его идентификатору\.
   
-`openModal(modal: AppStateModals): void`
+- `openModal(modal: AppStateModals): void`
   
-  Метод для открытия модального окна\.
+  - Метод для открытия модального окна\.
   
-`setMessage(message: string | null, isError: boolean): void`
+- `setMessage(message: string | null, isError: boolean): void`
   
-  Метод для установки сообщения в модальном окне и флага ошибки\.
+  - Метод для установки сообщения в модальном окне и флага ошибки\.
 
 Описание методов интерфейса `IWebLarekApi`
 
-`getProductList(): Promise<ApiListResponse<IProduct>>`
+- `getProductList(): Promise<ApiListResponse<IProduct>>`
   
-  Метод для получения списка продуктов\.
+  - Метод для получения списка продуктов\.
   
-`getProductItem(): Promise<IProduct>`
+- `getProductItem(): Promise<IProduct>`
   
-  Метод для получения информации о конкретном продукте\.
+  - Метод для получения информации о конкретном продукте\.
   
-`postOrder(): Promise<IPostOrder>`
+- `postOrder(): Promise<IPostOrder>`
   
-  Метод для создания заказа\.
+  - Метод для создания заказа\.
 
