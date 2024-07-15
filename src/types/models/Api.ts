@@ -1,12 +1,5 @@
 import { ProductCategory } from "./App";
 
-export type ApiListResponse<Type> = {
-    total: number,
-    items: Type[]
-};
-
-export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
-
 export interface IProduct{
     id: string;
     description: string;
@@ -21,8 +14,3 @@ export interface IPostOrder{
     totalPrice: number|null;
 }
 
-export interface IWebLarekApi{
-    getProductList(): Promise<ApiListResponse<IProduct>>;
-    getProductItem(): Promise<IProduct>;
-    postOrder() : Promise<IPostOrder>;
-}

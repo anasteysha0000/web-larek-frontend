@@ -58,10 +58,12 @@ export interface AppState {
 	// Пользовательские действия
 	selectProduct(id: string): void;
 	openBasket(): void;
-	buyProduct(id: string): void;
+	addProduct(id: string): void;
 	deleteProduct(id: string): void;
+    updateBasket():void;
 
 	// Методы для работы с модальными окнами
 	openModal(modal: AppStateModals): void;
+    closeModal(modal: AppStateModals):void;
 	setMessage(message: string | null, isError: boolean): void;
 }
