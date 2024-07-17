@@ -6,9 +6,14 @@ export type ProductCategory =
 	| 'кнопка'
 	| 'другое';
 
-export type ProductPayment =
-	| 'online' | 'cash';
+export type ProductPayment = 'online' | 'cash';
 
+export interface IPage {
+	catalog: IProduct[];
+	basket: string[];
+	order: IOrder | null;
+	preview: string | null;
+}
 export interface IBasket {
 	itemsBasket: [IProduct, string, number][];
 	totalBasket: number | null;
@@ -23,6 +28,7 @@ export interface IOrder extends IContacts {
 	total: number | null;
 	items: string[];
 }
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
 // Какие модальные окна у нас есть
 export enum AppStateModals {
 	product = 'modal:product',
@@ -39,31 +45,4 @@ export enum AppStateChanges {
 	selectedProduct = 'change:selectedProduct',
 	basket = 'change:basket',
 	order = 'change:order',
-}
-export interface AppState {
-	// Загружаемые с сервера данные
-	products: Map<string, IProduct>;
-
-	// Заполняемые пользователем данные
-	selectedProduct: IProduct | null;
-	basket: IBasket;
-	contacts: IContacts;
-	order: IOrder;
-
-	// Состояние интерфейса
-	openedModal: AppStateModals;
-	modalMessage: string | null;
-	isError: boolean;
-
-	// Пользовательские действия
-	selectProduct(id: string): void;
-	openBasket(): void;
-	addProduct(id: string): void;
-	deleteProduct(id: string): void;
-    updateBasket():void;
-
-	// Методы для работы с модальными окнами
-	openModal(modal: AppStateModals): void;
-    closeModal(modal: AppStateModals):void;
-	setMessage(message: string | null, isError: boolean): void;
 }

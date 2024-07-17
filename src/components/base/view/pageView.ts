@@ -1,5 +1,5 @@
-import { Component } from "./base/component";
-import { IEvents } from "./base/events";
+import { Component } from "../base/component";
+import { IEvents } from "../base/events";
 
 interface IPage {
 	counter: number | null;

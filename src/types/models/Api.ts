@@ -7,6 +7,7 @@ export interface IProduct{
     title: string;
     category: ProductCategory;
     price: number;
+    button: string;
 }
 
 export interface IPostOrder{
