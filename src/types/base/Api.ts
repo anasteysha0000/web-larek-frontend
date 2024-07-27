@@ -4,8 +4,3 @@ export type ApiListResponse<Type> = {
     total: number,
     items: Type[]
 };
-export interface IWebLarekApi{
-    getProductList(): Promise<ApiListResponse<IProduct>>;
-    getProductItem(): Promise<IProduct>;
-    postOrder() : Promise<IPostOrder>;
-}

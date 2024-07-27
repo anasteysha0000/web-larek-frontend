@@ -1,4 +1,5 @@
-import { Component } from '../base/base/component';
+import { Component } from "../base/view/Component";
+
 
 interface ISuccess {
 	total: number;

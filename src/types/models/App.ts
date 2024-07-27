@@ -9,10 +9,9 @@ export type ProductCategory =
 export type ProductPayment = 'online' | 'cash';
 
 export interface IPage {
-	catalog: IProduct[];
-	basket: string[];
-	order: IOrder | null;
-	preview: string | null;
+    counter: number;
+    catalog: HTMLElement[];
+    locked: boolean;
 }
 export interface IBasket {
 	itemsBasket: [IProduct, string, number][];
@@ -45,4 +44,5 @@ export enum AppStateChanges {
 	selectedProduct = 'change:selectedProduct',
 	basket = 'change:basket',
 	order = 'change:order',
+	
 }

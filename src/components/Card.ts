@@ -1,22 +1,22 @@
 import { IPostOrder, IProduct } from '../types/models/Api';
 import { AppStateChanges } from '../types/models/App';
 import { ensureElement } from '../utils/utils';
-import { Component } from './base/base/component';
-export type TCardActions = {
+import { Component } from './base/view/Component';
+export type ICardActions = {
 	onClick: (event: MouseEvent) => void;
 };
 
 export class Card extends Component<IProduct> {
-	protected id: HTMLElement;
-	protected description?: HTMLElement;
-	protected image: HTMLImageElement;
-	protected title: HTMLElement;
-	protected category: HTMLElement;
-	protected price: HTMLElement;
-	protected button: HTMLElement;
-	protected index: HTMLElement;
-	protected flagBtn: boolean;
-	constructor(element: HTMLElement, state: TCardActions) {
+	protected _id: HTMLElement;
+	protected _description?: HTMLElement;
+	protected _image: HTMLImageElement;
+	protected _title: HTMLElement;
+	protected _category: HTMLElement;
+	protected _price: HTMLElement;
+	protected _button: HTMLElement;
+	protected _index: HTMLElement;
+	protected _flagBtn: boolean;
+	constructor(element: HTMLElement, state: ICardActions) {
 		super(element);
 	}
 	set titleCard(value: string) {}

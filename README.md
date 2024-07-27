@@ -143,38 +143,6 @@ export enum AppStateChanges {
 }
 ```
 
-`AppState`
-
-Интерфейс, описывающий состояние приложения\.
-
-```typescript
-export interface AppState {
-  // Загружаемые с сервера данные
-  products: Map<string, IProduct>;
-
-  // Заполняемые пользователем данные
-  selectedProduct: IProduct | null;
-  basket: IBasket;
-  contacts: IContacts;
-  order: IOrder;
-
-  // Состояние интерфейса
-  openedModal: AppStateModals;
-  modalMessage: string | null;
-  isError: boolean;
-
-  // Пользовательские действия
-  selectProduct(id: string): void;
-  openBasket(): void;
-  addProduct(id: string): void;
-  deleteProduct(id: string): void;
-
-  // Методы для работы с модальными окнами
-  openModal(modal: AppStateModals): void;
-  setMessage(message: string | null, isError: boolean): void;
-}
-```
-
 `ApiListResponse<Type>`
 
 Тип, представляющий ответ API со списком элементов\.
@@ -257,35 +225,7 @@ export interface IWebLarekApi {
   
   - Метод для создания заказа\.
 
-## Документация по интерфейсам отображения
-
-IView
-
-Интерфейс описывает отображение для заданного типа данных T. Этот интерфейс включает методы и свойства, необходимые для работы с элементом DOM и его рендеринга.
-
-```typescript
-export interface IView<T, S = object> {
-	// отображение для заданного типа данных
-	element: HTMLElement; // корневой элемент
-	copy(settings?: S): IView<T>; // копирующий конструктор
-	render(data?: Partial<T>): HTMLElement; // метод рендера
-}
-```
-IViewConstructor
-
-Интерфейс описывает конструктор отображения. Этот интерфейс включает метод создания нового экземпляра отображения на основе переданного корневого элемента и настроек.
-
-```typescript
-export interface IViewConstructor<T, S> {
-	// конструктор отображения
-	// получает на вход клонированный шаблон
-	// или существующий элемент,
-	// а также настройки для отображения
-	new (root: HTMLElement, settings: S): IView<T>;
-}
-```
-
-## Архитектура приложения
+# Архитектура приложения
 Код приложения разделен на слои согласно парадигме MVP:
 
 - **слой представления, отвечает за отображение данных на странице**
@@ -294,19 +234,12 @@ export interface IViewConstructor<T, S> {
 
 ## Базовый код
 
+
 ### Класс Api
-
-Класс Api предоставляет методы для выполнения HTTP-запросов (GET и POST) к базовому URL. Этот класс инкапсулирует общие операции, такие как настройка заголовков и обработка ответов.
-
-## Класс Api
 
 Класс Api представляет собой обертку для выполнения HTTP-запросов с использованием Fetch API. Он поддерживает методы GET и POST (а также другие методы, такие как PUT и DELETE, через метод POST).
 
-### Конструктор
-
-#### constructor(baseUrl: string, options: RequestInit = {})
-
-Создает экземпляр класса Api.
+#### Конструктор
 
 - **Параметры:**
   - baseUrl (string): Базовый URL для всех запросов.
@@ -324,9 +257,9 @@ constructor(baseUrl: string, options: RequestInit = {}) {
 }
 ```
 
-### Методы
+#### Методы
 
-#### protected handleResponse(response: Response): Promise<object>
+##### protected handleResponse(response: Response): Promise<object>
 
 Обрабатывает ответ от сервера.
 
@@ -341,7 +274,7 @@ protected handleResponse(response: Response): Promise<object> {
 }
 ```
 
-#### get(uri: string): Promise<object>
+##### get(uri: string): Promise<object>
 
 Выполняет GET-запрос.
 
@@ -357,7 +290,7 @@ get(uri: string) {
 }
 ```
 
-#### post(uri: string, data: object, method: ApiPostMethods = 'POST'): Promise<object>
+##### post(uri: string, data: object, method: ApiPostMethods = 'POST'): Promise<object>
 
 Выполняет POST-запрос.
 
@@ -376,13 +309,13 @@ post(uri: string, data: object, method: ApiPostMethods = 'POST') {
 }
 ```
 
-## Класс EventEmitter
+### Класс EventEmitter
 
 Класс EventEmitter представляет собой брокер событий, позволяющий подписываться на события, инициировать их и управлять подписками\. Он поддерживает подписку на события по шаблону \(например, регулярные выражения\) и предоставляет возможность слушать все события\.
 
-### Интерфейсы и Типы
+#### Интерфейсы и Типы
 
-#### Типы
+##### Типы
 
 - **EventName**: Тип, представляющий имя события\. Может быть строкой или регулярным выражением\.
   ```typescript
@@ -402,7 +335,7 @@ post(uri: string, data: object, method: ApiPostMethods = 'POST') {
   };
   ```
 
-#### Интерфейс IEvents
+##### Интерфейс IEvents
 
 Интерфейс, описывающий методы для управления событиями\.
 
@@ -414,9 +347,9 @@ export interface IEvents {
 }
 ```
 
-### Конструктор
+#### Конструктор
 
-#### constructor()
+##### constructor()
 
 Создает экземпляр класса `EventEmitter`\.
 
@@ -426,7 +359,7 @@ constructor() {
 }
 ```
 
-### Методы
+#### Методы
 
 #### on<T extends object>(eventName: EventName, callback: (event: T) => void): void
 
@@ -445,7 +378,7 @@ on<T extends object>(eventName: EventName, callback: (event: T) => void) {
 }
 ```
 
-#### off(eventName: EventName, callback: Subscriber): void
+##### off(eventName: EventName, callback: Subscriber): void
 
 Снимает обработчик с события\.
 
@@ -464,7 +397,7 @@ off(eventName: EventName, callback: Subscriber) {
 }
 ```
 
-#### emit<T extends object>(eventName: string, data?: T): void
+##### emit<T extends object>(eventName: string, data?: T): void
 
 Инициирует событие с данными\.
 
@@ -482,7 +415,7 @@ emit<T extends object>(eventName: string, data?: T) {
 }
 ```
 
-#### onAll(callback: (event: EmitterEvent) => void): void
+##### onAll(callback: (event: EmitterEvent) => void): void
 
 Подписывается на все события\.
 
@@ -495,7 +428,7 @@ onAll(callback: (event: EmitterEvent) => void) {
 }
 ```
 
-#### offAll(): void
+##### offAll(): void
 
 Сбрасывает все обработчики\.
 
@@ -505,7 +438,7 @@ offAll() {
 }
 ```
 
-#### trigger<T extends object>(eventName: string, context?: Partial<T>): (data: T) => void
+##### trigger<T extends object>(eventName: string, context?: Partial<T>): (data: T) => void
 
 Создает триггер\-функцию, генерирующую событие при вызове\.
 
@@ -525,3 +458,194 @@ t;(eventName: string, context?: Partial<T>) {
     };
 }
 ```
+## Модель
+### Класс Model
+Класс Model является абстрактным базовым классом для создания моделей данных, которые могут генерировать события при изменениях. Он обеспечивает базовую функциональность для работы с данными и событиями.
+
+Конструктор
+
+#### constructor(data: Partial<T>, protected events: IEvents)
+
+Конструктор принимает два параметра:
+
+- data — частичные данные типа T, которые будут использованы для инициализации модели.
+- events — экземпляр интерфейса IEvents, который будет использоваться для генерации событий.
+
+Конструктор использует Object.assign для копирования свойств из объекта data в экземпляр модели.
+### Методы
+
+#### emitChanges(event: string, payload?: object): void
+
+Метод для генерации событий, когда модель изменяется.
+
+- event — строка, представляющая имя события.
+- payload — необязательный объект с дополнительными данными, которые будут переданы вместе с событием.
+
+### Класс AppData
+Класс AppData предназначен для управления моделью приложения, включая управление продуктами, корзиной и заказами. Он обеспечивает методы для установки каталога продуктов, управления корзиной, проверки формы заказа и создания заказа.
+ 
+Конструктор
+
+constructor(events: IEvents)
+
+
+Конструктор принимает один параметр:
+
+- events: IEvents - объект, реализующий интерфейс событий, который используется для управления событиями в приложении.
+
+### Методы
+
+#### setCatalog
+
+setCatalog(items: IProduct[]): void
+
+
+Устанавливает каталог продуктов.
+
+- items: IProduct[] - массив продуктов, который будет установлен в качестве каталога.
+
+#### setPreview
+
+setPreview(id: string | null): void
+
+
+Устанавливает продукт для предварительного просмотра.
+
+- id: string | null - идентификатор продукта для предварительного просмотра. Если значение null, предварительный просмотр сбрасывается.
+
+#### setTotal
+
+setTotal(): void
+
+Вычисляет и устанавливает общую стоимость заказа на основе продуктов в корзине.
+
+#### setContacts
+
+setContacts(email: string, phone: string): void
+
+
+Устанавливает контактные данные пользователя.
+
+- email: string - адрес электронной почты пользователя.
+- phone: string - номер телефона пользователя.
+
+#### setPayment
+
+setPayment(type: ProductPayment): void
+
+
+Устанавливает тип оплаты для заказа.
+
+- type: ProductPayment - тип оплаты (например, "online" или "offline").
+
+#### getProduct
+
+getProduct(cardId: string): IProduct | undefined
+
+
+Возвращает продукт по его идентификатору.
+
+- cardId: string - идентификатор продукта.
+- Возвращает объект продукта или undefined, если продукт не найден.
+
+#### addProduct
+
+addProduct(product: IProduct): void
+
+
+Добавляет продукт в корзину.
+
+- product: IProduct - объект продукта, который будет добавлен в корзину.
+
+#### removeProduct
+
+removeProduct(product: IProduct): void
+
+
+Удаляет продукт из корзины.
+
+- product: IProduct - объект продукта, который будет удален из корзины.
+
+#### clearBasket
+
+clearBasket(): void
+
+
+Очищает корзину, удаляя все продукты из нее.
+
+#### isOrderValidForm
+
+isOrderValidForm(): boolean
+
+
+Проверяет, является ли форма заказа действительной.
+
+- Возвращает true, если форма заказа действительна, иначе false.
+
+#### isContactsValidForm
+
+isContactsValidForm(): boolean
+
+
+Проверяет, является ли форма контактных данных действительной.
+
+- Возвращает true, если форма контактных данных действительна, иначе false.
+
+#### setOrderField
+
+setOrderField(field: keyof IOrder, value: string): void
+
+
+Устанавливает значение поля в заказе.
+
+- field: keyof IOrder - поле заказа, которое необходимо установить.
+- value: string - значение, которое необходимо установить для указанного поля.
+
+#### createOrder
+
+createOrder(): void
+Создает заказ на основе текущих данных в корзине и контактных данных пользователя.
+
+## Представление
+### Класс Component
+это абстрактный класс, который предоставляет базовый функционал для управления элементами DOM. Он содержит методы для работы с классами, текстом, состоянием элементов и изображениями. Класс также имеет метод для рендеринга данных.
+
+#### constructor(container: HTMLElement)
+
+Конструктор принимает один параметр:
+
+- container — HTML-элемент, который будет использоваться в качестве контейнера для компонента.
+### Методы
+
+#### toggleClass(element: HTMLElement, className: string, force?: boolean): void
+
+Метод для добавления или удаления CSS-класса у элемента.
+
+- element — HTML-элемент, у которого нужно добавить или удалить класс.
+- className — имя CSS-класса.
+- force — необязательный параметр. Если передан, то добавляет класс, если значение true, и удаляет, если значение false.
+
+#### setText(element: HTMLElement, value: unknown): void
+
+Метод для установки текста в элемент.
+
+- element — HTML-элемент, в который нужно установить текст.
+- value — значение текста. Может быть любого типа, но обычно строка или число.
+
+#### setDisabled(element: HTMLElement, state: boolean): void
+
+Метод для установки состояния "disabled" у элемента.
+
+- element — HTML-элемент, у которого нужно установить состояние.
+- state — логическое значение. Если true, элемент будет отключен; если false, элемент будет включен.
+
+#### protected setImage(element: HTMLImageElement, src: string, alt?: string): void
+
+Метод для установки изображения в элементе <img>.
+
+- element — HTML-элемент <img>, в который нужно установить изображение.
+- src — URL изображения.
+- alt — необязательный параметр. Альтернативный текст для изображения.
+
+### render(data?: Partial<T>): HTMLElement
+метод используется для рендеринга компонента принимает в качестве параметров data - объект, содержащий данные для обновления компонента.
