@@ -42,9 +42,8 @@ yarn build
 ```
 ## Интерфейсы и типы данных, используемые в приложении
 
- `ProductCategory`
 
-Тип, представляющий категории продуктов\.
+
 
 ```typescript
 export type ProductCategory =
@@ -54,19 +53,17 @@ export type ProductCategory =
   | 'кнопка'
   | 'другое';
 ```
+Тип, представляющий категории продуктов.
 
- `ProductPayment`
 
-Тип, представляющий способы оплаты\.
 
 ```typescript
 export type ProductPayment =
   | 'online' | 'cash';
 ```
+Тип, представляющий способы оплаты.
 
-`IProduct`
 
-Интерфейс, описывающий продукт\.
 
 ```typescript
 export interface IProduct {
@@ -78,10 +75,7 @@ export interface IProduct {
   price: number;
 }
 ```
-
-`IBasket`
-
-Интерфейс, описывающий корзину покупок\.
+Интерфейс, описывающий продукт.
 
 ```typescript
 export interface IBasket {
@@ -89,10 +83,7 @@ export interface IBasket {
   totalBasket: number | null;
 }
 ```
-
-`IContacts`
-
-Интерфейс, описывающий контактную информацию\.
+Интерфейс, описывающий корзину покупок.
 
 ```typescript
 interface IContacts {
@@ -100,10 +91,10 @@ interface IContacts {
   phone: string;
 }
 ```
+Интерфейс, описывающий контактную информацию.
 
- `IOrder`
 
-Интерфейс, описывающий заказ\. Наследует `IContacts`\.
+
 
 ```typescript
 interface IOrder extends IContacts {
@@ -113,11 +104,8 @@ interface IOrder extends IContacts {
   items: string[];
 }
 ```
+Интерфейс, описывающий заказ. Наследует `IContacts`.
 
-
- `AppStateModals`
-
-Перечисление, описывающее возможные модальные окна в приложении\.
 
 ```typescript
 enum AppStateModals {
@@ -128,9 +116,10 @@ enum AppStateModals {
   postOrder = 'modal:postOrder',
 }
 ```
- `AppStateChanges`
+Перечисление, описывающее возможные модальные окна в приложении.
 
-Перечисление, описывающее возможные изменения состояния приложения\.
+
+
 
 ```typescript
 export enum AppStateChanges {
@@ -142,10 +131,10 @@ export enum AppStateChanges {
   order = 'change:order',
 }
 ```
+Перечисление, описывающее возможные изменения состояния приложения.
 
-`ApiListResponse<Type>`
 
-Тип, представляющий ответ API со списком элементов\.
+
 
 ```typescript
 export type ApiListResponse<Type> = {
@@ -153,18 +142,18 @@ export type ApiListResponse<Type> = {
     items: Type[]
 };
 ```
+Тип, представляющий ответ API со списком элементов.
 
-`ApiPostMethods`
 
-Тип, представляющий методы HTTP\-запросов для изменения данных\.
+
 
 ```typescript
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 ```
+Тип, представляющий методы HTTP-запросов для изменения данных.
 
-`IPostOrder`
 
-Интерфейс, описывающий ответ API при создании заказа\.
+
 
 ```typescript
 export interface IPostOrder {
@@ -172,10 +161,10 @@ export interface IPostOrder {
     totalPrice: number|null;
 }
 ```
+Интерфейс, описывающий ответ API при создании заказа.
 
-`IWebLarekApi`
 
-Интерфейс, описывающий методы API\.
+
 
 ```typescript
 export interface IWebLarekApi {
@@ -184,25 +173,28 @@ export interface IWebLarekApi {
     postOrder() : Promise<IPostOrder>;
 }
 ```
-Тип, представляющий имя события. Может быть строкой или регулярным выражением.
+Интерфейс, описывающий методы API.
+
   ```typescript
   type EventName = string | RegExp;
   ```
+Тип, представляющий имя события. Может быть строкой или регулярным выражением.
 
-Тип, представляющий функцию - обработчик события.
+
   ```typescript
   type Subscriber = Function;
   ```
+Тип, представляющий функцию - обработчик события.
 
-Тип, представляющий объект события с именем и данными.
   ```typescript
   type EmitterEvent = {
       eventName: string,
       data: unknown
   };
   ```
+  Тип, представляющий объект события с именем и данными.
 
-Интерфейс, описывающий методы для управления событиями\.
+
 
 ```typescript
 export interface IEvents {
@@ -211,14 +203,16 @@ export interface IEvents {
     trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void;
 }
 ```
-Тип ICardActions описывает действия, которые могут быть выполнены компонентом Card. Он содержит одно свойство:
+Интерфейс, описывающий методы для управления событиями.
 
-- `onClick` : (event: MouseEvent) - Функция, которая будет вызвана при клике на определенный элемент.
 ```typescript
 export type ICardActions = {
   onClick: (event: MouseEvent) => void;
 };
 ```
+Тип ICardActions описывает действия, которые могут быть выполнены компонентом Card. Он содержит одно свойство:
+
+- `onClick` : (event: MouseEvent) - Функция, которая будет вызвана при клике на определенный элемент.
 
 # Архитектура приложения
 Код приложения разделен на слои согласно парадигме MVP:
