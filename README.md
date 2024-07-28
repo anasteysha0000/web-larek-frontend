@@ -184,66 +184,56 @@ export interface IWebLarekApi {
     postOrder() : Promise<IPostOrder>;
 }
 ```
+Тип, представляющий имя события. Может быть строкой или регулярным выражением.
+  ```typescript
+  type EventName = string | RegExp;
+  ```
 
- Описание методов интерфейса `AppState`
+Тип, представляющий функцию - обработчик события.
+  ```typescript
+  type Subscriber = Function;
+  ```
 
-- `selectProduct(id: string): void`
-  
-  - Метод для выбора продукта по его идентификатору\.
-  
-- `openBasket(): void`
-  
-  - Метод для открытия корзины\.
-  
-- `addProduct(id: string): void`
-  
-  - Метод для добавления продукта в корзину по его идентификатору\.
-  
-- `deleteProduct(id: string): void`
-  
-  - Метод для удаления продукта из корзины по его идентификатору\.
-  
-- `openModal(modal: AppStateModals): void`
-  
-  - Метод для открытия модального окна\.
-  
-- `setMessage(message: string | null, isError: boolean): void`
-  
-  - Метод для установки сообщения в модальном окне и флага ошибки\.
+Тип, представляющий объект события с именем и данными.
+  ```typescript
+  type EmitterEvent = {
+      eventName: string,
+      data: unknown
+  };
+  ```
 
-Описание методов интерфейса `IWebLarekApi`
+Интерфейс, описывающий методы для управления событиями\.
 
-- `getProductList(): Promise<ApiListResponse<IProduct>>`
-  
-  - Метод для получения списка продуктов\.
-  
-- `getProductItem(): Promise<IProduct>`
-  
-  - Метод для получения информации о конкретном продукте\.
-  
-- `postOrder(): Promise<IPostOrder>`
-  
-  - Метод для создания заказа\.
+```typescript
+export interface IEvents {
+    on<T extends object>(event: EventName, callback: (data: T) => void): void;
+    emit<T extends object>(event: string, data?: T): void;
+    trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void;
+}
+```
+Тип ICardActions описывает действия, которые могут быть выполнены компонентом Card. Он содержит одно свойство:
+
+- `onClick` : (event: MouseEvent) - Функция, которая будет вызвана при клике на определенный элемент.
+```typescript
+export type ICardActions = {
+  onClick: (event: MouseEvent) => void;
+};
+```
 
 # Архитектура приложения
 Код приложения разделен на слои согласно парадигме MVP:
 
-- **слой представления, отвечает за отображение данных на странице**
-- **слой данных, отвечает за хранение и изменение данных**
-- **презентер, отвечает за связь представления и данных**
+- слой представления, отвечает за отображение данных на странице.
+- слой данных, отвечает за хранение и изменение данных.
+- презентер, отвечает за связь представления и данных.
 
-## Базовый код
+# Базовый код
 
 
-### Класс Api
+## Класс Api
 
 Класс Api представляет собой обертку для выполнения HTTP-запросов с использованием Fetch API. Он поддерживает методы GET и POST (а также другие методы, такие как PUT и DELETE, через метод POST).
 
-#### Конструктор
-
-- **Параметры:**
-  - baseUrl (string): Базовый URL для всех запросов.
-  - options (RequestInit, необязательный): Опции для настройки запросов.
 ```typescript
 constructor(baseUrl: string, options: RequestInit = {}) {
     this.baseUrl = baseUrl;
@@ -256,14 +246,15 @@ constructor(baseUrl: string, options: RequestInit = {}) {
     };
 }
 ```
+  - baseUrl (string): Базовый URL для всех запросов.
+  - options (RequestInit, необязательный): Опции для настройки запросов.
 
 #### Методы
 
-##### protected handleResponse(response: Response): Promise<object>
-
+```typescript
+protected handleResponse(response: Response): Promise<object>
+```
 Обрабатывает ответ от сервера.
-
-- **Параметры:**
   - response (Response): Ответ от сервера.
 
 ```typescript
@@ -273,12 +264,10 @@ protected handleResponse(response: Response): Promise<object> {
         .then(data => Promise.reject(data.error ?? response.statusText));
 }
 ```
-
-##### get(uri: string): Promise<object>
-
+```typescript
+get(uri: string): Promise<object>
+```
 Выполняет GET-запрос.
-
-- **Параметры:**
   - uri (string): URI для запроса.
 
 ```typescript
@@ -290,11 +279,10 @@ get(uri: string) {
 }
 ```
 
-##### post(uri: string, data: object, method: ApiPostMethods = 'POST'): Promise<object>
-
+```typescript
+post(uri: string, data: object, method: ApiPostMethods = 'POST'): Promise<object>
+```
 Выполняет POST-запрос.
-
-- **Параметры:**
   - uri (string): URI для запроса.
   - data (object): Данные для отправки в теле запроса.
   - method (ApiPostMethods, необязательный): Метод запроса (по умолчанию 'POST').
@@ -339,46 +327,6 @@ postOrder(order: IPostOrder): Promise<IPostOrder>
 
 Класс EventEmitter представляет собой брокер событий, позволяющий подписываться на события, инициировать их и управлять подписками\. Он поддерживает подписку на события по шаблону \(например, регулярные выражения\) и предоставляет возможность слушать все события\.
 
-#### Интерфейсы и Типы
-
-##### Типы
-
-- **EventName**: Тип, представляющий имя события\. Может быть строкой или регулярным выражением\.
-  ```typescript
-  type EventName = string | RegExp;
-  ```
-
-- **Subscriber**: Тип, представляющий функцию\-обработчик события\.
-  ```typescript
-  type Subscriber = Function;
-  ```
-
-- **EmitterEvent**: Тип, представляющий объект события с именем и данными\.
-  ```typescript
-  type EmitterEvent = {
-      eventName: string,
-      data: unknown
-  };
-  ```
-
-##### Интерфейс IEvents
-
-Интерфейс, описывающий методы для управления событиями\.
-
-```typescript
-export interface IEvents {
-    on<T extends object>(event: EventName, callback: (data: T) => void): void;
-    emit<T extends object>(event: string, data?: T): void;
-    trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void;
-}
-```
-
-#### Конструктор
-
-##### constructor()
-
-Создает экземпляр класса `EventEmitter`\.
-
 ```typescript
 constructor() {
     this._events = new Map<EventName, Set<Subscriber>>();
@@ -386,14 +334,12 @@ constructor() {
 ```
 
 #### Методы
-
-#### on<T extends object>(eventName: EventName, callback: (event: T) => void): void
-
-Устанавливает обработчик на событие\.
-
-- **Параметры:**
-  - **eventName** \(EventName\): Имя события или регулярное выражение\.
-  - callback \(\(event: T\) \=\> void\): Функция\-обработчик\.
+```typescript
+on<T extends object>(eventName: EventName, callback: (event: T) => void): void
+```
+Устанавливает обработчик на событие.
+  - eventName (EventName): Имя события или регулярное выражение.
+  - callback ((event: T) => void ): Функция -обработчик.
 
 ```typescript
 on<T extends object>(eventName: EventName, callback: (event: T) => void) {
@@ -403,14 +349,12 @@ on<T extends object>(eventName: EventName, callback: (event: T) => void) {
     this._events.get(eventName)?.add(callback);
 }
 ```
-
-##### off(eventName: EventName, callback: Subscriber): void
-
-Снимает обработчик с события\.
-
-- **Параметры:**
-  - **eventName** \(EventName\): Имя события или регулярное выражение\.
-  - callback \(Subscriber\): Функция\-обработчик\.
+```typescript
+off(eventName: EventName, callback: Subscriber): void
+```
+Снимает обработчик с события.
+  - eventName (EventName): Имя события или регулярное выражение.
+  - callback (Subscriber): Функция -обработчик.
 
 ```typescript
 off(eventName: EventName, callback: Subscriber) {
@@ -422,14 +366,12 @@ off(eventName: EventName, callback: Subscriber) {
     }
 }
 ```
-
-##### emit<T extends object>(eventName: string, data?: T): void
-
-Инициирует событие с данными\.
-
-- **Параметры:**
-  - **eventName** \(string\): Имя события\.
-  - **data** \(T, необязательный\): Данные события\.
+```typescript
+emit<T extends object>(eventName: string, data?: T): void
+```
+Инициирует событие с данными.
+  - eventName (string): Имя события.
+  - data (T, необязательный): Данные события.
 
 ```typescript
 emit<T extends object>(eventName: string, data?: T) {
@@ -440,13 +382,11 @@ emit<T extends object>(eventName: string, data?: T) {
     });
 }
 ```
-
-##### onAll(callback: (event: EmitterEvent) => void): void
-
-Подписывается на все события\.
-
-- **Параметры:**
-  - callback \(\(event: EmitterEvent\) \=\> void\): Функция\-обработчик\.
+```typescript
+ onAll(callback: (event: EmitterEvent) => void): void
+```
+Подписывается на все события.
+  - callback ((event: EmitterEvent) => void): Функция-обработчик.
 
 ```typescript
 onAll(callback: (event: EmitterEvent) => void) {
@@ -454,23 +394,19 @@ onAll(callback: (event: EmitterEvent) => void) {
 }
 ```
 
-##### offAll(): void
-
-Сбрасывает все обработчики\.
-
 ```typescript
 offAll() {
     this._events = new Map<EventName, Set<Subscriber>>();
 }
 ```
+Сбрасывает все обработчики.
+```typescript
+trigger<T extends object>(eventName: string, context?: Partial<T>): (data: T) => void
+```
+Создает триггер-функцию, генерирующую событие при вызове\.
 
-##### trigger<T extends object>(eventName: string, context?: Partial<T>): (data: T) => void
-
-Создает триггер\-функцию, генерирующую событие при вызове\.
-
-- **Параметры:**
-  - **eventName** \(string\): Имя события\.
-  - **context** \(Partial<T\>\): Контекст данных для события\.
+  - eventName (string): Имя события.
+  - context (Partial<T>): Контекст данных для события.
 
 ```typescript
 trigger<T extends object&g
@@ -484,17 +420,13 @@ t;(eventName: string, context?: Partial<T>) {
     };
 }
 ```
-## Модель
-### Класс Model
+# Модель
+## Класс Model
 Класс Model является абстрактным базовым классом для создания моделей данных, которые могут генерировать события при изменениях. Он обеспечивает базовую функциональность для работы с данными и событиями.
-
-Конструктор
 
 ```typescript
 constructor(data: Partial<T>, protected events: IEvents)
 ```
-Конструктор принимает два параметра:
-
 - data — частичные данные типа T, которые будут использованы для инициализации модели.
 - events — экземпляр интерфейса IEvents, который будет использоваться для генерации событий.
 
@@ -511,19 +443,16 @@ emitChanges(event: string, payload?: object): void
 ### Класс AppData
 Класс AppData предназначен для управления моделью приложения, включая управление продуктами, корзиной и заказами. Он обеспечивает методы для установки каталога продуктов, управления корзиной, проверки формы заказа и создания заказа.
  
-Конструктор
 
+```typescript
 constructor(events: IEvents)
-
-
-Конструктор принимает один параметр:
-
+```
 - events: IEvents - объект, реализующий интерфейс событий, который используется для управления событиями в приложении.
 #### Поля
 - _products (IProduct[]) представляет собой массив продуктов доступных в каталоге.
 - _order(IOrder) представляет собой объект заказа. Оно содержит информацию о текущем заказе, включая способ оплаты, контактные данные, адрес доставки, список товаров в заказе и общую стоимость. Поле инициализируется значениями по умолчанию.
 - _basket (IBasket[])  представляет собой массив товаров, добавленных в корзину.
-- _preview (string | null)  хранит идентификатор продукта, который находится в режиме предварительного просмотра.
+- _preview (string | null) хранит идентификатор продукта, который находится в режиме предварительного просмотра.
 - _events (IEvents) представляет собой объект для работы с событиями.
 - _formErrors (FormErrors)  представляет собой объект, содержащий ошибки формы. 
 #### Методы
@@ -531,7 +460,6 @@ constructor(events: IEvents)
 ```typescript
 setCatalog(items: IProduct[]): void
 ```
-
 Устанавливает каталог продуктов.
 
 - items: IProduct[] - массив продуктов, который будет установлен в качестве каталога.
@@ -547,7 +475,6 @@ setPreview(id: string | null): void
 ```typescript
 setTotal(): void
 ```
-
 Вычисляет и устанавливает общую стоимость заказа на основе продуктов в корзине.
 
 ```typescript
@@ -556,8 +483,6 @@ setContacts(email: string, phone: string): void
 
 Устанавливает контактные данные пользователя.
 
-- email: string - адрес электронной почты пользователя.
-- phone: string - номер телефона пользователя.
 
 ```typescript
 setPayment(type: ProductPayment): void
@@ -565,7 +490,7 @@ setPayment(type: ProductPayment): void
 
 Устанавливает тип оплаты для заказа.
 
-- type: ProductPayment - тип оплаты (например, "online" или "offline").
+- type: ProductPayment - тип оплаты ("online" или "cash").
 
 ```typescript
 getProduct(cardId: string): IProduct | undefined
@@ -629,8 +554,8 @@ createOrder(): void
 
 Создает заказ на основе текущих данных в корзине и контактных данных пользователя.
 
-## Представление
-### Класс Component
+# Отображение
+## Класс Component
 это абстрактный класс, который предоставляет базовый функционал для управления элементами DOM. Он содержит методы для работы с классами, текстом, состоянием элементов и изображениями. Класс также имеет метод для рендеринга данных. Данный класс расширяет следующие классы приложения:
 
 - `Page`
@@ -643,9 +568,6 @@ createOrder(): void
 ```typescript
 constructor(container: HTMLElement)
 ```
-
-Конструктор принимает один параметр:
-
 - container — HTML-элемент, который будет использоваться в качестве контейнера для компонента.
 #### Методы
 
@@ -692,7 +614,7 @@ render(data?: Partial<T>): HTMLElement
 
 метод используется для рендеринга компонента принимает в качестве параметров data - объект, содержащий данные для обновления компонента.
 
-### Класс Basket
+## Класс Basket
 
  Класс Basket представляет собой компонент корзины для веб-приложения. Он наследуется от базового класса Component и принимает контейнер и объект событий в конструкторе.
 
@@ -742,7 +664,7 @@ set selected(selected: number)
 - `selected`: number - количество выбранных товаров.
 
 
-### Класс Form
+## Класс Form
 Класс Form является базовым классом для работы с HTML-формами. Он предоставляет методы для обработки изменений в полях ввода, проверки валидности формы и отображения ошибок.
 
 ```typescript
@@ -790,7 +712,7 @@ render(state: Partial<T> & IFormState): void
 - `state`: Partial<T> & IFormState -  Объект состояния формы, включающий частичные данные формы и состояние валидности и ошибок.
 
 
-### Класс Modal
+## Класс Modal
 
 Класс Modal предназначен для работы с модальными окнами. Он предоставляет методы для открытия, закрытия и рендеринга содержимого модального окна.
 
@@ -833,7 +755,7 @@ render(data: IModalData): HTMLElement
 
 - `data`: IModalData - Объект данных для рендеринга модального окна, содержащий HTML-элемент, который будет установлен как содержимое модального окна.
 
-### Класс Success
+## Класс Success
 
 Класс Success предназначен для отображения успешного выполнения операции и предоставляет метод для обработки клика по элементу.
 
@@ -877,7 +799,7 @@ render(data: ISuccess): HTMLElement
 
 - `data`: ISuccess - Объект данных для рендеринга компонента Success, содержащий общее количество успешных операций.
 
-### Класс Card
+## Класс Card
 
 Класс Card предназначен для отображения карточки продукта и предоставляет методы для установки и получения различных свойств карточки, таких как заголовок, цена, изображение и описание.
 
@@ -888,17 +810,7 @@ constructor(element: HTMLElement, state: ICardActions)
 - `element`: HTMLElement - HTML-элемент, который будет использоваться в качестве контейнера для компонента Card.
 - `state`: ICardActions - Объект, содержащий действия, которые могут быть выполнены компонентом Card.
 
-#### Интерфейсы и типы
 
-```typescript
-export type ICardActions = {
-  onClick: (event: MouseEvent) => void;
-};
-```
-
-Тип ICardActions описывает действия, которые могут быть выполнены компонентом Card. Он содержит одно свойство:
-
-- `onClick` : (event: MouseEvent) - Функция, которая будет вызвана при клике на определенный элемент.
 
 #### Поля
   - _id (HTMLElement) представляет собой HTML-элемент, который используется для хранения идентификатора товара или заказа. 
