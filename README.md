@@ -532,20 +532,14 @@ clearBasket(): void
 Очищает корзину, удаляя все продукты из нее.
 
 ```typescript
-isOrderValidForm(): boolean
+isOrderValidForm()
 ```
 
 Проверяет, является ли форма заказа действительной.
 
 - Возвращает true, если форма заказа действительна, иначе false.
 
-```typescript
-isContactsValidForm(): boolean
-```
 
-Проверяет, является ли форма контактных данных действительной.
-
-- Возвращает true, если форма контактных данных действительна, иначе false.
 
 ```typescript
 setOrderField(field: keyof IOrder, value: string): void
@@ -556,11 +550,7 @@ setOrderField(field: keyof IOrder, value: string): void
 - field: keyof IOrder - поле заказа, которое необходимо установить.
 - value: string - значение, которое необходимо установить для указанного поля.
 
-```typescript
-createOrder(): void
-```
 
-Создает заказ на основе текущих данных в корзине и контактных данных пользователя.
 
 # Отображение
 ## Класс Component
@@ -883,16 +873,6 @@ protected setDescriptionCard(element: HTMLElement, value: unknown)
 
 - element: HTMLElement - HTML-элемент для описания.
 - value: unknown - Значение описания.
-
-```typescript
-protected setImageCard(element: HTMLImageElement, src: string, alt: string)
-```
-
-Защищенный метод для установки изображения карточки с указанным URL и альтернативным текстом в указанный HTML-элемент.
-
-- element: HTMLImageElement - HTML-элемент изображения.
-- src: string - URL изображения.
-- alt: string - Альтернативный текст изображения.
 
 ## Класс Contacts
 Класс Contacts предназначен для управления контактной информацией, такой как электронная почта и телефон, и наследуется от класса Form.

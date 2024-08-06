@@ -8,10 +8,13 @@ export interface IWebLarekApi{
     postOrder() : Promise<IPostOrder>;
 }
 class WebLarekApi extends Api implements IWebLarekApi{
-    constructor(baseUrl: string, options: RequestInit){
-        super(baseUrl,options)
+    readonly cdn: string;
+
+    constructor(cdn: string, baseUrl: string, options?: RequestInit) {
+        super(baseUrl, options);
+        this.cdn = cdn;
     }
-    getProductList(id:string): Promise<ApiListResponse<IProduct>> {
+    getProductListp(id:string): Promise<ApiListResponse<IProduct>> {
         
     }
     getProductItem(): Promise<IProduct> {

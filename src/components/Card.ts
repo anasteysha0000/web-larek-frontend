@@ -1,5 +1,5 @@
 import { IPostOrder, IProduct } from '../types/models/Api';
-import { AppStateChanges } from '../types/models/App';
+import { ProductCategory } from '../types/models/App';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/view/Component';
 export type ICardActions = {
@@ -18,18 +18,50 @@ export class Card extends Component<IProduct> {
 	protected _flagBtn: boolean;
 	constructor(element: HTMLElement, state: ICardActions) {
 		super(element);
+		this._title = ensureElement<HTMLElement>('card__title', element);
+		this._image = element.querySelector('card__image');
+		this._price = ensureElement<HTMLSpanElement>('card__price',element);
+		this._category = element.querySelector('card__category');
+		this._description = element.querySelector('card__text');
+		this._button = element.querySelector(`card__button`);
+		if (state?.onClick) {
+			const targetElement = this._button || element;
+			targetElement.addEventListener('click', state.onClick);
+		  
+			if (this._flagBtn && this._button) {
+			  this.setDisabled(this._button, this._flagBtn);
+			}
+		}
 	}
-	set titleCard(value: string) {}
-	get titleCard(): string {}
-	set priceCard(value: string) {}
-	get priceCard(): string {}
-	set imageCard(value: string) {}
-	set descriptionCard(value: string) {}
- 	get descriptionCard(): string{}
-	set categoreCard():string{};
-	get categoreCard():string{};
+	set titleCard(value: string) {
+		this.setText(this._title, value);
+	}
+	get titleCard(): string {
+		return this._title.textContent || '';
+	}
+	set priceCard(value: string) {
+		(value===null)? this.setText(this._price,'Бесценно'):this.setText(this._price, `${value} синапсов`)
+	}
+	get priceCard(): string {
+		return this._price.textContent || '';
+	}
+	set imageCard(value: string) {
+		this.setImage(this._image, value, this.titleCard); //указать в документации что он из компонента метод сетимадж
+	}
+	set descriptionCard(value: string) {
+		this.setText(this._description,value)
+	}
+	get descriptionCard(): string{
+		return this._description.textContent || '';
+	}
+   	set categoryCard(value:ProductCategory){//изменено
+		this.setText(this._category, value)
+	};
+   	get categoryCard():string{
+		return this._category.textContent || '';
+	};
 
-	protected setDescriptionCard(element: HTMLElement,value: unknown){}
-	protected setImageCard(element: HTMLImageElement, src: string, alt: string) {}
-	setCategoryCard(value: string) {}
+	
+	//удалено сетпрайс и сетдескриптион и сеткатегори
+  
 }
