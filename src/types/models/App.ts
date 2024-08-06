@@ -14,7 +14,7 @@ export interface IPage {
     locked: boolean;
 }
 export interface IBasket {
-	itemsBasket: [IProduct, string, number][];
+	itemsBasket: string[]// изменено с этого [IProduct, string, number][];
 	totalBasket: number | null;
 }
 export interface IContacts {
