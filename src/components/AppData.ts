@@ -1,5 +1,5 @@
 import { IProduct } from "../types/models/Api";
-import { FormErrors, IBasket, IOrder, ProductPayment } from "../types/models/App";
+import { FormErrors, IBasket, IContacts, IOrder, ProductPayment } from "../types/models/App";
 import { IEvents } from "./base/view/Events";
 import { Model } from "./base/view/Model";
 export interface IAppState {
@@ -80,8 +80,8 @@ export class AppData extends Model<IAppState>{
 		this._events.emit('orderErrors:change', this._formErrors); //добавить в документацию событие
 		return Object.keys(this._formErrors).length === 0;
 	  }
-	setOrderField(field: keyof IOrder, value: string) {
-		(this._order[field] as string) = value;
+	setOrderField(field: keyof IContacts, value: string) {
+		this._order[field] = value;
 
         if (this.isOrderValidForm()) {
             this._events.emit('order:ready', this._order);

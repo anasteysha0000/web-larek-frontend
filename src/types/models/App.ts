@@ -27,6 +27,7 @@ export interface IOrder extends IContacts {
 	total: number | null;
 	items: string[];
 }
+
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
 // Какие модальные окна у нас есть
 export enum AppStateModals {
