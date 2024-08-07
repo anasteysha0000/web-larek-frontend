@@ -1,5 +1,5 @@
 import { IProduct } from "../types/models/Api";
-import { FormErrors, IBasket, IContacts, IOrder, ProductPayment } from "../types/models/App";
+import { FormErrors, IBasket, IOrder, ProductPayment } from "../types/models/App";
 import { IEvents } from "./base/view/Events";
 import { Model } from "./base/view/Model";
 export interface IAppState {
