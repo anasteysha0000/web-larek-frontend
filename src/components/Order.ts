@@ -30,7 +30,7 @@ export class Order extends Form<IOrder> {
 		if (buttonType === 'cash') {
 			this._paymentTypes = 'cash';
 		}
-		this._paymentTypes = 'card';
+		this._paymentTypes = 'online';
 	}
 	toggleCashButton() {
 		this.toggleClass(this._cashButton, 'button_alt-active');
