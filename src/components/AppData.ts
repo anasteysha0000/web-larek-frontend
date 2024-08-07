@@ -1,5 +1,5 @@
 import { IProduct } from "../types/models/Api";
-import { FormErrors, IBasket, IOrder, ProductPayment } from "../types/models/App";
+import { FormErrors, IBasket, IContacts, IOrder, ProductPayment } from "../types/models/App";
 import { IEvents } from "./base/view/Events";
 import { Model } from "./base/view/Model";
 export interface IAppState {
@@ -10,6 +10,7 @@ export interface IAppState {
 }
 export class AppData extends Model<IAppState>{
 	_products: IProduct[];
+	
 	_order: IOrder = {
 		payment:"online",
 		email: "",
@@ -25,7 +26,7 @@ export class AppData extends Model<IAppState>{
 	 _preview: IProduct=null; //поменять в документации, и спросить у коли что это??
 	 _events: IEvents;
 	 _formErrors: FormErrors = {};
-	constructor(events:IEvents){
+	constructor({},events:IEvents){
 		super({}, events);
 	}
     setProducts(items: IProduct[]) {//поменять в документации setProducts(items: IProduct[])
@@ -36,7 +37,10 @@ export class AppData extends Model<IAppState>{
 		this._preview = items;
 		this._events.emit('preview:change', this._preview)//поменять в документации
 	}
-
+	setCatalog(items: IProduct[]) {
+		this._products = items;
+		this.emitChanges('items:changed', { catalog: this._products });
+	  }
 	setContacts(email:string,phone:string){ //надо ли? как будто нет, потому что они не устанавливаются, а вводятся пользователем
 		this._order.email = email;
 		this._order.phone = phone;

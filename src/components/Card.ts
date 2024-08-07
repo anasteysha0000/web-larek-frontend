@@ -7,15 +7,15 @@ export type ICardActions = {
 };
 
 export class Card extends Component<IProduct> {
-	protected _id: HTMLElement;
-	protected _description?: HTMLElement;
-	protected _image: HTMLImageElement;
-	protected _title: HTMLElement;
-	protected _category: HTMLElement;
-	protected _price: HTMLElement;
-	protected _button: HTMLElement;
-	protected _index: HTMLElement;
-	protected _flagBtn: boolean;
+	 _id: HTMLElement;
+	 _description?: HTMLElement;
+	 _image: HTMLImageElement;
+	 _title: HTMLElement;
+	 _category: HTMLElement;
+	 _price: HTMLElement;
+	 _button: HTMLElement;
+	 _index: HTMLElement;
+	 _flagBtn: boolean;
 	constructor(element: HTMLElement, state: ICardActions) {
 		super(element);
 		this._title = ensureElement<HTMLElement>('card__title', element);
@@ -57,9 +57,7 @@ export class Card extends Component<IProduct> {
    	set categoryCard(value:ProductCategory){//изменено
 		this.setText(this._category, value)
 	};
-   	get categoryCard():string{
-		return this._category.textContent || '';
-	};
+ 
 
 	
 	//удалено сетпрайс и сетдескриптион и сеткатегори

@@ -7,8 +7,10 @@ import { Basket } from './components/common/Basket';
 import { Modal } from './components/common/Modal';
 import { Contacts } from './components/Contacts';
 import { Order } from './components/Order';
+import { Page } from './components/Page';
 import { WebLarekApi } from './components/WebLarekApi';
 import './scss/styles.scss';
+import { IProduct } from './types/models/Api';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 
@@ -26,7 +28,7 @@ const contactTemplate = ensureElement<HTMLTemplateElement>('#contacts');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 
 // Модель данных приложения
-const appData = new AppData(events);
+const appData = new AppData({},events);
 
 // Глобальные контейнеры
 const page = new Page(document.body, events);
@@ -44,16 +46,16 @@ events.on('modal:open', () => {
   page.locked = true;
 });
 
-events.on('items:changed', () => {
-	page.catalog = page.catalog.map((item: { title: any; image: any; price: any; category: any; }) => {
+events.on('items:changed', (items:IProduct[]) => {
+	page.catalog = items.map((item) => {
 		const card = new Card(cloneTemplate(cardCatalogTemplate), {
-			onClick: () => events.emit('preview:changed', item),
+			onClick: () => events.emit('products:change', item),
 		});
-		return card.render({
-			title: item.title,
-			image: item.image,
-			price: item.price,
-			category: item.category,
-		});
+		return card.render(item);
 	});
 });
+api.getProductList()
+    .then(appData.setProducts.bind(appData))
+    .catch(err => {
+        console.error(err);
+    });
