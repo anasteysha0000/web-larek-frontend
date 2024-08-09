@@ -64,7 +64,7 @@ events.on('items:changed', () => {
 
 events.on('preview:changed', (item : IProduct) => {
 		const card = new Card(cloneTemplate(cardPreviewTemplate), {
-			onClick: () => events.emit('basket:add', item),
+			onClick: () => events.emit('basket:add', item)
 		});
 		return modal.render({
 			content: card.render({
@@ -73,23 +73,31 @@ events.on('preview:changed', (item : IProduct) => {
 				price: item.price,
 				image: item.image,
 				title: item.title,
-				category: item.category
+				category: item.category,
+			
 			})
 		});
+
 })
 
 
 events.on('basket:add', (item: IProduct) => {
 	appData.addProductToBasket(item);
+
 	page.counter = appData._basket.itemsBasket.length
 	modal.close()
+	
+
+})
+events.on('card:deletefromcart', (item: IProduct) => {
+	appData.removeProductInBasket(item);
+	page.counter = appData._basket.itemsBasket.length
 });
 events.on('basket:open', () => {
 	const products = appData._basket.itemsBasket.map((item, index) => {
 		const product = new Card(cloneTemplate(cardBasketTemplate), {
 				onClick: () => {
 					events.emit('card:deletefromcart');
-				
 				},
 			}
 		);
@@ -99,7 +107,6 @@ events.on('basket:open', () => {
 				index: `${index+1}`
 			});
 		})
-		basket.total = appData.getTotal()
 	modal.render({
 		content: basket.render({
 			products: products,
@@ -107,6 +114,28 @@ events.on('basket:open', () => {
 		}),
 	});
 });
+events.on('basket:change', () => {
+	const products = appData._basket.itemsBasket.map((item, index) => {
+		const product = new Card(cloneTemplate(cardBasketTemplate), {
+				onClick: () => {
+					events.emit('card:deletefromcart');
+				},
+			}
+		);
+		return product.render({
+				price: item.price,
+				title: item.title,
+				index: `${index+1}`
+			});
+		})
+	modal.render({
+		content: basket.render({
+			products: products,
+			total: appData.getTotal(),
+		}),
+	});
+});
+  
 //МОДАЛЬНЫЕ ОКНА
 // Включение события открытия Модальных окон
 events.on('modal:open', () => {

@@ -9,6 +9,7 @@ export interface IProduct{
     price: number;
     button: string;
     index: string;
+    selected: boolean;
 }
 
 export interface IPostOrder{

@@ -13,9 +13,9 @@ export class Card extends Component<IProduct> {
 	 _title: HTMLElement;
 	 _category: HTMLElement;
 	 _price: HTMLElement;
-	 _button: HTMLElement;
+	 _button: HTMLButtonElement;
 	 _index: HTMLSpanElement;
-	 _flagBtn: boolean;
+	 _selected: boolean;
 	 
 	constructor(element: HTMLElement, state: ICardActions) {
 		super(element);
@@ -25,16 +25,27 @@ export class Card extends Component<IProduct> {
 		this._category = element.querySelector('.card__category');
 		this._description = element.querySelector('.card__text');
 		this._button = element.querySelector(`.card__button`);
+		this._button = element.querySelector(`.card__button`);
 		this._index =element.querySelector('.basket__item-index');
 
 		if (state?.onClick) {
 			const targetElement = this._button || element;
 			targetElement.addEventListener('click', state.onClick);
 		  
-			if (this._flagBtn && this._button) {
-			  this.setDisabled(this._button, this._flagBtn);
+			if (this._selected && this._button) {
+			  this.setDisabled(this._button, this._selected);
 			}
+
 		}
+	}
+	set selected(value:boolean){
+		 this._selected=value
+	}
+	get selected(): boolean {
+		return this._selected;
+	}
+	get button(): HTMLButtonElement {
+		return this._button;
 	}
 	set index(value: string) {
 		this._index.textContent = value;
@@ -75,7 +86,7 @@ export class Card extends Component<IProduct> {
 		this._category.classList.replace('card__category_soft', ProductsCategories[value]);
 		this.setText(this._category, value)
 	};
- 
+	
 
 	
 	//удалено сетпрайс и сетдескриптион и сеткатегори
