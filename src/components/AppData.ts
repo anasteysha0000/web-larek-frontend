@@ -4,7 +4,7 @@ import { IEvents } from "./base/view/Events";
 import { Model } from "./base/view/Model";
 export interface IAppState {
     product: IProduct;
-    basket: string[];
+    basket: IProduct[];
     preview: string | null;
     order: IOrder | null;
 }
@@ -47,14 +47,14 @@ export class AppData extends Model<IAppState>{
 	getProduct(cardId: string) {}//???
 
     addProductToBasket(product: IProduct) {
-		this._basket.itemsBasket.push(product.id);
+		this._basket.itemsBasket.push(product);
 		this._basket.totalBasket += product.price
 		this.emitChanges('basket:change', this._basket)
 	}
 
     removeProductInBasket(product: IProduct) {
-		if (this._basket.itemsBasket.indexOf(product.id) > -1) {
-		  this._basket.itemsBasket.splice(this._basket.itemsBasket.indexOf(product.id), 1);
+		if (this._basket.itemsBasket.indexOf(product) > -1) {
+		  this._basket.itemsBasket.splice(this._basket.itemsBasket.indexOf(product), 1);
 		  this._basket.totalBasket -= product.price;
 		  this.emitChanges('basket:change', this._basket);
 	  }

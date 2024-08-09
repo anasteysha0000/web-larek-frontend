@@ -6,16 +6,15 @@ import { EventEmitter } from '../base/view/Events';
 interface IBasketView {
 	products: HTMLElement[];
 	total: number | null;
-	selected: number;
 }
 export class Basket extends Component<IBasketView> {
-	protected _list: HTMLElement;
+	protected _products: HTMLElement;
 	protected _total: HTMLElement;
 	protected _button: HTMLElement;
 
 	constructor(container: HTMLElement, protected events: EventEmitter) {
 		super(container);
-		this._list = ensureElement<HTMLElement>('.basket__list', this.container);
+		this._products = ensureElement<HTMLElement>('.basket__list', this.container);
 		this._total = this.container.querySelector('.basket__price');
 		this._button = this.container.querySelector('.basket__button')
 
@@ -26,10 +25,9 @@ export class Basket extends Component<IBasketView> {
 		}
 	}
 	set products(products: HTMLElement[]) {
-		products.length? this._list.replaceChildren(...products):  this._list.replaceChildren(createElement<HTMLParagraphElement>('p', {
+		products.length ? this._products.replaceChildren(...products) :  this._products.replaceChildren(createElement<HTMLParagraphElement>('p', {
 			textContent: 'Корзина пуста'
 		}));
-           
 	}
 	set total(total: number) {
 		this.setText(this._total,`${total} синапсов`); 
