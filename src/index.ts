@@ -35,7 +35,7 @@ const appData = new AppData({}, events);
 
 // Глобальные контейнеры
 const page = new Page(document.body, events);
-const modale = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
+const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 
 // Переиспользуемые части интерфейса
 const basket = new Basket(cloneTemplate(basketTemplate), events);
@@ -44,10 +44,7 @@ const order = new Order(cloneTemplate(deliveryTemplate), events, {
 });
 const contacts = new Contacts(cloneTemplate(contactTemplate), events);
 
-// Включение события открытия Модальных окон
-events.on('modal:open', () => {
-  page.locked = true;
-});
+
 
 events.on('items:changed', () => {
 	page.catalog = appData._products.map((item) => {
@@ -69,7 +66,7 @@ events.on('preview:changed', (item : IProduct) => {
 		const card = new Card(cloneTemplate(cardPreviewTemplate), {
 			onClick: () => events.emit('basket:changed', item),
 		});
-		return modale.render({
+		return modal.render({
 			content: card.render({
 				id: item.id,
 				description: item.description,
@@ -80,13 +77,56 @@ events.on('preview:changed', (item : IProduct) => {
 			})
 		});
 })
-events.on('modal:open', () => {
-	page.locked = true;
+events.on('basket:changed', (item: IProduct) => {
+		appData.addProductToBasket(item);
+		page.counter = appData._basket.itemsBasket.length
+
+});
+events.on('basket:open', () => {
+	const products = appData._basket.itemsBasket.map((item, index) => {
+		const product = new Card(
+			'card',
+			cloneTemplate(cardBasketTemplate),
+			{
+				onClick: () => {
+					events.emit('card:deletefromcart', item);
+					events.emit('basket:open');
+				},
+			}
+		);
+
+		return product.render({
+			price: item.price,
+			title: item.title,
+			id: item.id,
+			index: index + 1,
+		});
+	});
+
+	modal.render({
+		content: basket.render({
+			products,
+			selected: products.length,
+		}),
+	});
+});
+// Изменение состояния корзины
+events.on('basket:changed', (products: IProduct[]) => {
+   
 })
 
-events.on('modal:close', () => {
+
+//МОДАЛЬНЫЕ ОКНА
+// Включение события открытия Модальных окон
+events.on('modal:open', () => {
 	page.locked = true;
+  });
+
+events.on('modal:close', () => {
+	page.locked = false;
 })
+
+//Получение карточек с апи
 api.getProductList()
     .then( (data : IProduct[]) => {
 			appData.setProducts(data)

@@ -30,7 +30,7 @@ export class Basket extends Component<IBasketView> {
 			textContent: 'Корзина пуста'
 		}));
            
-	}//что если товар бесценный?
+	}
 	set total(total: number) {
 		this.setText(this._total,`${total} синапсов`); 
 	}

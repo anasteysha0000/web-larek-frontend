@@ -36,10 +36,7 @@ export class AppData extends Model<IAppState>{
 		this._preview = items;
 		this.emitChanges('preview:change', this._preview)//поменять в документации
 	}
-	setCatalog(items: IProduct[]) {
-		this._products = items;
-		this.emitChanges('items:changed', { catalog: this._products });
-	  }
+	
 	setContacts(email:string,phone:string){ //надо ли? как будто нет, потому что они не устанавливаются, а вводятся пользователем
 		this._order.email = email;
 		this._order.phone = phone;
