@@ -4,7 +4,15 @@ export type ProductCategory =
 	| 'софт-скил'
 	| 'дополнительное'
 	| 'кнопка'
-	| 'другое';
+	| 'другое'
+
+export enum ProductsCategories {
+	'хард-скил' = 'card__category_hard',
+	'дополнительное' = 'card__category_additional',
+	'кнопка' = 'card__category_button',
+	'другое' = 'card__category_other',
+	'софт-скил' = 'card__category_soft'
+}
 
 export type ProductPayment = 'online' | 'cash';
 

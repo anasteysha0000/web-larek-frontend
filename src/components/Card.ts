@@ -1,5 +1,5 @@
 import { IPostOrder, IProduct } from '../types/models/Api';
-import { ProductCategory } from '../types/models/App';
+import { ProductCategory, ProductsCategories } from '../types/models/App';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/view/Component';
 export type ICardActions = {
@@ -16,14 +16,15 @@ export class Card extends Component<IProduct> {
 	 _button: HTMLElement;
 	 _index: HTMLElement;
 	 _flagBtn: boolean;
+	 
 	constructor(element: HTMLElement, state: ICardActions) {
 		super(element);
-		this._title = ensureElement<HTMLElement>('card__title', element);
-		this._image = element.querySelector('card__image');
-		this._price = ensureElement<HTMLSpanElement>('card__price',element);
-		this._category = element.querySelector('card__category');
-		this._description = element.querySelector('card__text');
-		this._button = element.querySelector(`card__button`);
+		this._title = ensureElement<HTMLElement>('.card__title', element);
+		this._image = element.querySelector('.card__image');
+		this._price = ensureElement<HTMLSpanElement>('.card__price',element);
+		this._category = element.querySelector('.card__category');
+		this._description = element.querySelector('.card__text');
+		this._button = element.querySelector(`.card__button`);
 		if (state?.onClick) {
 			const targetElement = this._button || element;
 			targetElement.addEventListener('click', state.onClick);
@@ -33,28 +34,37 @@ export class Card extends Component<IProduct> {
 			}
 		}
 	}
-	set titleCard(value: string) {
+	
+	set id(value: string) {
+		this.container.dataset.id = value;
+	}
+	
+	get id(): string {
+		return this.container.dataset.id || '';
+	}
+	set title(value: string) {
 		this.setText(this._title, value);
 	}
-	get titleCard(): string {
+	get title(): string {
 		return this._title.textContent || '';
 	}
-	set priceCard(value: string) {
-		(value===null)? this.setText(this._price,'Бесценно'):this.setText(this._price, `${value} синапсов`)
+	set price(value: string) {
+		(value===null) ? this.setText(this._price,'Бесценно') : this.setText(this._price, `${value} синапсов`)
 	}
-	get priceCard(): string {
+	get price(): string {
 		return this._price.textContent || '';
 	}
-	set imageCard(value: string) {
-		this.setImage(this._image, value, this.titleCard); //указать в документации что он из компонента метод сетимадж
+	set image(value: string) {
+		this.setImage(this._image, value, this.title); //указать в документации что он из компонента метод сетимадж
 	}
-	set descriptionCard(value: string) {
+	set description(value: string) {
 		this.setText(this._description,value)
 	}
-	get descriptionCard(): string{
+	get description(): string{
 		return this._description.textContent || '';
 	}
-   	set categoryCard(value:ProductCategory){//изменено
+   	set category(value: ProductCategory){//изменено
+		this._category.classList.replace('card__category_soft', ProductsCategories[value]);
 		this.setText(this._category, value)
 	};
  

@@ -27,19 +27,19 @@ export class Modal extends Component<IModalData> {
     }
 
 	open() {
-		this.container.classList.add('.modal_active')
+		this.container.classList.add('modal_active')
 		this.events.emit('modal:open');
 	}
 
 	close() {
-		this.container.classList.remove('.modal_active')
-		this._content = null;
+		this.container.classList.remove('modal_active')
+		this._content = ensureElement<HTMLElement>('.modal__content', this.container);
 		this.events.emit('modal:close');
 	}
 
 	render(data: IModalData): HTMLElement {
 		super.render(data);
-        this.open();
-        return this.container;
+		this.open();
+    return this.container;
 	}
 }

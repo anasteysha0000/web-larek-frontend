@@ -4,10 +4,10 @@ import { Component } from "./base/view/Component";
 import { IEvents } from "./base/view/Events";
 
 export class Page extends Component<IPage> {
-	protected _counter: HTMLElement;
-    protected _catalog: HTMLElement;
-    protected _wrapper: HTMLElement;
-    protected _basket: HTMLElement;
+	 _counter: HTMLElement;
+     _catalog: HTMLElement;
+     _wrapper: HTMLElement;
+     _basket: HTMLElement;
 
 	constructor(container: HTMLElement, protected events: IEvents) {
         super(container);

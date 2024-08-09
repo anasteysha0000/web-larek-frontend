@@ -1,4 +1,6 @@
 // Импорт необходимых модулей и компонентов
+// Импорт стилей
+import './scss/styles.scss';
 import { AppData } from './components/AppData';
 import { EventEmitter } from './components/base/view/Events';
 import { Model } from './components/base/view/Model';
@@ -13,6 +15,7 @@ import './scss/styles.scss';
 import { IProduct } from './types/models/Api';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
+import { ProductCategory } from './types/models/App';
 
 // Инициализация событий и API
 const events = new EventEmitter();
@@ -28,11 +31,11 @@ const contactTemplate = ensureElement<HTMLTemplateElement>('#contacts');
 const successTemplate = ensureElement<HTMLTemplateElement>('#success');
 
 // Модель данных приложения
-const appData = new AppData({},events);
+const appData = new AppData({}, events);
 
 // Глобальные контейнеры
 const page = new Page(document.body, events);
-const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
+const modale = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 
 // Переиспользуемые части интерфейса
 const basket = new Basket(cloneTemplate(basketTemplate), events);
@@ -46,16 +49,48 @@ events.on('modal:open', () => {
   page.locked = true;
 });
 
-events.on('items:changed', (items:IProduct[]) => {
-	page.catalog = items.map((item) => {
+events.on('items:changed', () => {
+	page.catalog = appData._products.map((item) => {
 		const card = new Card(cloneTemplate(cardCatalogTemplate), {
-			onClick: () => events.emit('products:change', item),
+			onClick: () => events.emit('preview:changed', item),
 		});
-		return card.render(item);
+		return card.render({
+			id: item.id,
+			description: item.description,
+			price: item.price,
+			image: item.image,
+			title: item.title,
+			category: item.category
+		});
 	});
 });
+
+events.on('preview:changed', (item : IProduct) => {
+		const card = new Card(cloneTemplate(cardPreviewTemplate), {
+			onClick: () => events.emit('basket:changed', item),
+		});
+		return modale.render({
+			content: card.render({
+				id: item.id,
+				description: item.description,
+				price: item.price,
+				image: item.image,
+				title: item.title,
+				category: item.category
+			})
+		});
+})
+events.on('modal:open', () => {
+	page.locked = true;
+})
+
+events.on('modal:close', () => {
+	page.locked = true;
+})
 api.getProductList()
-    .then(appData.setProducts.bind(appData))
+    .then( (data : IProduct[]) => {
+			appData.setProducts(data)
+		})
     .catch(err => {
         console.error(err);
     });

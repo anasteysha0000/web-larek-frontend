@@ -37,4 +37,5 @@ export class Basket extends Component<IBasketView> {
 	set selected(products: string[]) {
         products.length? this.setDisabled(this._button, false):  this.setDisabled(this._button, true);
 	}
+
 }

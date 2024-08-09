@@ -16,13 +16,12 @@ export class WebLarekApi extends Api implements IWebLarekApi {
 		this.cdn = cdn;
 	}
 
-	getProductList() {
-        return this.get('/product').then((data: ApiListResponse<IProduct>) =>
-            data.items.map((item) => ({
-              ...item,
-              image: this.cdn + item.image
-            }))
-          );
+	getProductList() : Promise<IProduct[]> {
+        return this.get('/product').then((data: ApiListResponse<IProduct>) => 
+					data.items.map((item : IProduct) => ({
+						...item,
+						image: this.cdn + item.image
+					})))
 	}
 
 	getProductItem(id: string): Promise<IProduct> {

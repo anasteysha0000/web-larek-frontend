@@ -24,18 +24,17 @@ export class AppData extends Model<IAppState>{
 		totalBasket:0
 	 };
 	 _preview: IProduct=null; //поменять в документации, и спросить у коли что это??
-	 _events: IEvents;
 	 _formErrors: FormErrors = {};
-	constructor({},events:IEvents){
-		super({}, events);
+	constructor(data : object, events: IEvents){
+		super(data, events);
 	}
     setProducts(items: IProduct[]) {//поменять в документации setProducts(items: IProduct[])
 		this._products = items
-		this._events.emit('products:change', this._products)//поменять в документации
+		this.emitChanges('items:changed', this._products)//поменять в документации
 	}
     setPreview(items: IProduct) { //поменять в документации
 		this._preview = items;
-		this._events.emit('preview:change', this._preview)//поменять в документации
+		this.emitChanges('preview:change', this._preview)//поменять в документации
 	}
 	setCatalog(items: IProduct[]) {
 		this._products = items;
@@ -53,19 +52,20 @@ export class AppData extends Model<IAppState>{
     addProductToBasket(product: IProduct) {
 		this._basket.itemsBasket.push(product.id);
 		this._basket.totalBasket += product.price
-		this._events.emit('basket:change', this._basket)
+		this.emitChanges('basket:change', this._basket)
 	}
+
     removeProductInBasket(product: IProduct) {
 		if (this._basket.itemsBasket.indexOf(product.id) > -1) {
 		  this._basket.itemsBasket.splice(this._basket.itemsBasket.indexOf(product.id), 1);
 		  this._basket.totalBasket -= product.price;
-		  this._events.emit('basket:change', this._basket);
+		  this.emitChanges('basket:change', this._basket);
 	  }
 	}
     clearBasket() {
 		this._basket.itemsBasket = [];
 		this._basket.totalBasket = 0
-		this._events.emit('basket:change', this._basket);
+		this.emitChanges('basket:change', this._basket);
 	}
 	private validateField(field: keyof IOrder, errorMessage: string): void { //добавить в документацию
 		if (!this._order[field]) {
@@ -81,14 +81,14 @@ export class AppData extends Model<IAppState>{
 		this.validateField('payment', 'Необходимо указать тип оплаты');
 		this.validateField('email', 'Необходимо указать электронную почту');
 		this.validateField('phone', 'Необходимо указать номер телефона');
-		this._events.emit('orderErrors:change', this._formErrors); //добавить в документацию событие
+		this.emitChanges('orderErrors:change', this._formErrors); //добавить в документацию событие
 		return Object.keys(this._formErrors).length === 0;
 	  }
 	setOrderField(field: keyof IContacts, value: string) {
 		this._order[field] = value;
 
         if (this.isOrderValidForm()) {
-            this._events.emit('order:ready', this._order);
+            this.emitChanges('order:ready', this._order);
         }
 	}
   
