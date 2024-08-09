@@ -14,7 +14,7 @@ export class Card extends Component<IProduct> {
 	 _category: HTMLElement;
 	 _price: HTMLElement;
 	 _button: HTMLElement;
-	 _index: HTMLElement;
+	 _index: HTMLSpanElement;
 	 _flagBtn: boolean;
 	 
 	constructor(element: HTMLElement, state: ICardActions) {
@@ -25,6 +25,8 @@ export class Card extends Component<IProduct> {
 		this._category = element.querySelector('.card__category');
 		this._description = element.querySelector('.card__text');
 		this._button = element.querySelector(`.card__button`);
+		this._index =element.querySelector('.basket__item-index');
+
 		if (state?.onClick) {
 			const targetElement = this._button || element;
 			targetElement.addEventListener('click', state.onClick);
@@ -34,7 +36,13 @@ export class Card extends Component<IProduct> {
 			}
 		}
 	}
+	set index(value: string) {
+		this._index.textContent = value;
+	  }
 	
+	  get index(): string {
+		return this._index.textContent || '';
+	  }
 	set id(value: string) {
 		this.container.dataset.id = value;
 	}

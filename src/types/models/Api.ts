@@ -8,6 +8,7 @@ export interface IProduct{
     category: ProductCategory;
     price: number;
     button: string;
+    index: string;
 }
 
 export interface IPostOrder{

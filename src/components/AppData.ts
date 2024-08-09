@@ -51,7 +51,16 @@ export class AppData extends Model<IAppState>{
 		this._basket.totalBasket += product.price
 		this.emitChanges('basket:change', this._basket)
 	}
-
+	getTotal() {
+		return this._order.items.reduce((total, itemId) => {
+			const product = this._products.find(it => it.id === itemId);
+			// Проверяем, найден ли продукт
+			if (product) {
+				return total + product.price;
+			}
+			return total; // Если продукт не найден, просто возвращаем текущую сумму
+		}, 0);
+	}
     removeProductInBasket(product: IProduct) {
 		if (this._basket.itemsBasket.indexOf(product) > -1) {
 		  this._basket.itemsBasket.splice(this._basket.itemsBasket.indexOf(product), 1);
