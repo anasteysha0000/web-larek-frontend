@@ -38,9 +38,14 @@ export class Card extends Component<IProduct> {
 
 		}
 	}
-	set selected(value:boolean){
-		 this._selected=value
+	//set selected(value:boolean){
+	//	 this._selected = value
+	//}
+	setTextq(value:string){
+		this.button.textContent = value
 	}
+		
+
 	get selected(): boolean {
 		return this._selected;
 	}

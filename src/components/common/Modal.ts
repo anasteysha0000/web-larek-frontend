@@ -10,7 +10,7 @@ interface IModalData {
 export class Modal extends Component<IModalData> {
 	protected _closeButton: HTMLButtonElement;
 	protected _content: HTMLElement;
-
+	protected _nextButton: HTMLButtonElement;
 	constructor(container: HTMLElement, protected events: IEvents) {
         super(container);
 
@@ -20,6 +20,7 @@ export class Modal extends Component<IModalData> {
         this._closeButton.addEventListener('click', this.close.bind(this));
         this.container.addEventListener('click', this.close.bind(this));
         this._content.addEventListener('click', (event) => event.stopPropagation());
+	
     }
 
     set content(value: HTMLElement) {
@@ -36,6 +37,9 @@ export class Modal extends Component<IModalData> {
 		this._content = ensureElement<HTMLElement>('.modal__content', this.container);
 		this.events.emit('modal:close');
 	}
+	//toggleCartBtn(state: boolean) {
+	//	this.setDisabled(this._nextButton, state);
+	//}
 
 	render(data: IModalData): HTMLElement {
 		super.render(data);

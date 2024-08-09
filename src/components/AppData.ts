@@ -28,6 +28,7 @@ export class AppData extends Model<IAppState>{
 	constructor(data : object, events: IEvents){
 		super(data, events);
 	}
+ 
     setProducts(items: IProduct[]) {//поменять в документации setProducts(items: IProduct[])
 		this._products = items
 		this.emitChanges('items:changed', this._products)//поменять в документации
@@ -45,18 +46,27 @@ export class AppData extends Model<IAppState>{
 		this._order.payment = type;
 	}
 	getProduct(cardId: string) {}//???
-
+	
     addProductToBasket(product: IProduct) {
-		this._basket.itemsBasket.push(product);
-		this._basket.totalBasket += product.price
-		this.emitChanges('basket:change', this._basket)
+		const exists = this._basket.itemsBasket.some(item => item.id === product.id);
+        if (!exists) {
+            this._basket.itemsBasket.push(product);
+			this._basket.totalBasket += product.price;
+		  	this.emitChanges('basket:change', this._basket);
+        } 
+	}
+	addProductToBasket2(product: IProduct) {
+		const exists = this._basket.itemsBasket.some(item => item.id === product.id);
+        if (!exists) {
+          return true
+        } 
+		
 	}
 	getTotal() { //добавлено
 		return this._basket.itemsBasket.reduce((a, c) => a + c.price, 0)
 	}
-	getTotalminus() { //добавлено
-		return this._basket.itemsBasket.reduce((a, c) => a - c.price, 0)
-	}
+	
+
 	
     removeProductInBasket(product: IProduct) {
 		if (this._basket.itemsBasket.indexOf(product) > -1) {
