@@ -22,7 +22,7 @@ export interface IPage {
     locked: boolean;
 }
 export interface IBasket {
-	itemsBasket: string[]// изменено с этого [IProduct, string, number][];
+	itemsBasket: IProduct[]// изменено с этого [IProduct, string, number][];
 	totalBasket: number | null;
 }
 export interface IContacts {

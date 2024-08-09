@@ -59,38 +59,60 @@ events.on('items:changed', () => {
     });
 });
 
-events.on('preview:changed', (item: IProduct) => {
-    const card = new Card(cloneTemplate(cardPreviewTemplate), {
-        onClick: () => events.emit('basket:changed', item),
-    });
-    return modal.render({
-        content: card.render({
-            id: item.id,
-            description: item.description,
-            price: item.price,
-            image: item.image,
-            title: item.title,
-            category: item.category
-        })
-    });
-});
-
+events.on('preview:changed', (item : IProduct) => {
+		const card = new Card(cloneTemplate(cardPreviewTemplate), {
+			onClick: () => events.emit('basket:changed', item),
+		});
+		return modal.render({
+			content: card.render({
+				id: item.id,
+				description: item.description,
+				price: item.price,
+				image: item.image,
+				title: item.title,
+				category: item.category
+			})
+		});
+})
 events.on('basket:changed', (item: IProduct) => {
-    appData.addProductToBasket(item);
-    page.counter = appData._basket.itemsBasket.length;
+		appData.addProductToBasket(item);
+		page.counter = appData._basket.itemsBasket.length
+
 });
 
 events.on('basket:open', () => {
-    modal.render({
-        content: basket.render({})
-    });
-});
+	const products = appData._basket.itemsBasket.map((item, index) => {
+		const product = new Card(
+			'card',
+			cloneTemplate(cardBasketTemplate),
+			{
+				onClick: () => {
+					events.emit('card:deletefromcart', item);
+					events.emit('basket:open');
+				},
+			}
+		);
 
-// Включение события удаления карточки из корзины
-events.on('card:deletefromcart', (item: IProduct) => {
-    appData.removeProductInBasket(item);
-    page.counter = appData._basket.itemsBasket.length;
+		return product.render({
+			price: item.price,
+			title: item.title,
+			id: item.id,
+			index: index + 1,
+		});
+	});
+
+	modal.render({
+		content: basket.render({
+			products,
+			selected: products.length,
+		}),
+	});
 });
+// Изменение состояния корзины
+events.on('basket:changed', (products: IProduct[]) => {
+   
+})
+
 
 // МОДАЛЬНЫЕ ОКНА
 // Включение события открытия модальных окон
