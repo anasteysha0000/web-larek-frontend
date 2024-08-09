@@ -83,7 +83,6 @@ events.on('preview:changed', (item : IProduct) => {
 
 events.on('basket:add', (item: IProduct) => {
 	appData.addProductToBasket(item);
-
 	page.counter = appData._basket.itemsBasket.length
 	modal.close()
 	
@@ -97,7 +96,7 @@ events.on('basket:open', () => {
 	const products = appData._basket.itemsBasket.map((item, index) => {
 		const product = new Card(cloneTemplate(cardBasketTemplate), {
 				onClick: () => {
-					events.emit('card:deletefromcart');
+					events.emit('basket:add');
 				},
 			}
 		);
@@ -131,11 +130,15 @@ events.on('basket:change', () => {
 	modal.render({
 		content: basket.render({
 			products: products,
-			total: appData.getTotal(),
+			total: appData.getTotalminus(),
 		}),
 	});
 });
-  
+events.on('basket:change', () => {
+    modal.render({
+      content: basket.render({})
+    })
+})
 //МОДАЛЬНЫЕ ОКНА
 // Включение события открытия Модальных окон
 events.on('modal:open', () => {

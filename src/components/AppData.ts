@@ -54,7 +54,9 @@ export class AppData extends Model<IAppState>{
 	getTotal() { //добавлено
 		return this._basket.itemsBasket.reduce((a, c) => a + c.price, 0)
 	}
-	
+	getTotalminus() { //добавлено
+		return this._basket.itemsBasket.reduce((a, c) => a - c.price, 0)
+	}
 	
     removeProductInBasket(product: IProduct) {
 		if (this._basket.itemsBasket.indexOf(product) > -1) {
