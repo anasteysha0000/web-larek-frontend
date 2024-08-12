@@ -17,6 +17,7 @@ import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 import { IAddress, IContacts, IOrder, ProductCategory } from './types/models/App';
 import {ProductPayment} from './types/models/App'
+import { Success } from './components/common/Success';
 // Инициализация событий и API
 const events = new EventEmitter();
 const api = new WebLarekApi(CDN_URL, API_URL);
@@ -79,18 +80,11 @@ events.on('formErrors:change', (errors: Partial<IOrder>) => {
 events.on(/^order\..*:change/, (data: { field: keyof IAddress, value: string }) => {
     appData.setOrderField(data.field, data.value);
 });
-events.on('payment:take', (data: { payment: string }) => {
-	appData.setOrderField('payment', data.payment);
-});
-//events.on(/^contacts\..*:change/, (data: {field: keyof IContacts, value: string}) => {
-  //  appData.setOrderField(data.field, data.value)
-//})
-events.on('payment:toggle', (target: HTMLElement) => {
-	if(!target.classList.contains('button_alt-active')){
-		order.toggleButtons();
-	
-	  }
+
+events.on(/^contacts\..*:change/, (data: {field: keyof IContacts, value: string}) => {
+    appData.setOrderField(data.field, data.value)
 })
+
 
 events.on('order:select', () => {
 	return modal.render({
@@ -101,6 +95,15 @@ events.on('order:select', () => {
 		})
 	})
 })
+events.on('order:submit', () => {
+	return modal.render({
+		content: contacts.render({
+			valid: false, 
+			errors: []
+		})
+	})
+})
+
 events.on('preview:changed', (item: IProduct) => {
     const card = new Card(cloneTemplate(cardPreviewTemplate), {
         onClick: () => {
@@ -131,7 +134,7 @@ events.on('basket:add', (item: IProduct) => {
 	appData.addProductToBasket(item);
 	page.counter = appData._basket.itemsBasket.length
 	modal.close()
-	//modal.toggleCartBtn(item.selected)
+	
 })
 events.on('card:deletefromcart', (item: IProduct) => {
 	appData.removeProductInBasket(item);

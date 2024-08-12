@@ -1,5 +1,5 @@
 import { IProduct } from "../types/models/Api";
-import { FormErrors, IAddress, IBasket, IContacts, IOrder, ProductPayment } from "../types/models/App";
+import { FormErrors, IAddress, IBasket, IContacts, IOrder, IOrderForms, ProductPayment } from "../types/models/App";
 import { IEvents } from "./base/view/Events";
 import { Model } from "./base/view/Model";
 export interface IAppState {
@@ -94,10 +94,10 @@ export class AppData extends Model<IAppState>{
 		this.validateField('payment', 'Необходимо указать тип оплаты');
 		this.validateField('email', 'Необходимо указать электронную почту');
 		this.validateField('phone', 'Необходимо указать номер телефона');
-		this.emitChanges('orderErrors:change', this._formErrors); //добавить в документацию событие
+		this.emitChanges('formErrors:change', this._formErrors); //добавить в документацию событие
 		return Object.keys(this._formErrors).length === 0;
 	  }
-	setOrderField(field: keyof IAddress, value: string) {
+	setOrderField(field: keyof IOrderForms, value: string) {
 		this._order[field] = value;
         if (this.isOrderValidForm()) {
             this.emitChanges('order:ready', this._order);
