@@ -1,4 +1,4 @@
-import { AppStateChanges, IOrder } from '../types/models/App';
+import { IOrder } from '../types/models/App';
 import { IEvents } from './base/view/Events';
 import { Form } from './common/Form';
 
@@ -8,7 +8,6 @@ export type TOrderActions = {
 export class Order extends Form<IOrder> {
 	protected _cashButton: HTMLButtonElement;
 	protected _cardButton: HTMLButtonElement;
-	 _paymentTypes: string; //изменено
 	 _address: HTMLInputElement; //изменено
 	constructor(
 		container: HTMLFormElement,

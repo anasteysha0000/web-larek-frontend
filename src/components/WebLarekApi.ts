@@ -17,26 +17,20 @@ export class WebLarekApi extends Api implements IWebLarekApi {
 		this.cdn = cdn;
 	}
 
-	getProductList() : Promise<IProduct[]> {
-        return this.get('/product').then((data: ApiListResponse<IProduct>) => 
-					data.items.map((item : IProduct) => ({
-						...item,
-						image: this.cdn + item.image
-					})))
-	}
+	public getProductList = (): Promise<IProduct[]> => this.get('/product').then((data: ApiListResponse<IProduct>) =>
+		data.items.map((item: IProduct) => ({
+			...item,
+			image: this.cdn + item.image
+		})));
 
-	getProductItem(id: string): Promise<IProduct> {
-		return this.get(`/product/${id}`).then((item: IProduct) => {
-			return {
-				...item,
-				image: this.cdn + item.image,
-			};
-		});
-	}
+	public getProductItem = (id: string): Promise<IProduct> => this.get(`/product/${id}`).then((item: IProduct) => {
+		return {
+			...item,
+			image: this.cdn + item.image,
+		};
+	});
 
-	postOrder(order: IOrder): Promise<IPostOrder> {
-		return this.post('/order', order).then((item: IPostOrder) => {
-			return item;
-		});
-	}
+	public postOrder = (order: IOrder): Promise<IPostOrder> => this.post('/order', order).then((item: IPostOrder) => {
+		return item;
+	});
 }

@@ -15,8 +15,7 @@ import './scss/styles.scss';
 import { IProduct } from './types/models/Api';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
-import { IAddress, IContacts, IOrder, ProductCategory } from './types/models/App';
-import {ProductPayment} from './types/models/App'
+import { IAddress, IContacts, IOrder } from './types/models/App';
 import { Success } from './components/common/Success';
 // Инициализация событий и API
 const events = new EventEmitter();
@@ -42,7 +41,6 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new Order(cloneTemplate(deliveryTemplate), events, {
     onClickPayment: (ev: Event) => events.emit('payment:toggle', ev.target)
-
 });
 const contacts = new Contacts(cloneTemplate(contactTemplate), events);
 
@@ -111,6 +109,7 @@ events.on('contacts:submit', () => {
     api.postOrder(appData._order)
       .then((result) => {
         appData.clearBasket();
+				page.counter = 0;
         const success = new Success(cloneTemplate(successTemplate), {
             onClick: () => {
                 modal.close();

@@ -30,7 +30,7 @@ export interface IContacts {
 	phone: string;
 }
 export interface IOrder extends IContacts, IAddress {
-	total: number | null;
+	total: number | string;
 	items: string[];
 }
 export interface IOrderForms{

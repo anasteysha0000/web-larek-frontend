@@ -37,9 +37,6 @@ export class Card extends Component<IProduct> {
 
 		}
 	}
-	//set selected(value:boolean){
-	//	 this._selected = value
-	//}
 	setTextq(value:string){
 		this.button.textContent = value
 	}
@@ -53,11 +50,11 @@ export class Card extends Component<IProduct> {
 	}
 	set index(value: string) {
 		this._index.textContent = value;
-	  }
+	}
 	
-	  get index(): string {
+	get index(): string {
 		return this._index.textContent || '';
-	  }
+	}
 	set id(value: string) {
 		this.container.dataset.id = value;
 	}
@@ -86,13 +83,9 @@ export class Card extends Component<IProduct> {
 	get description(): string{
 		return this._description.textContent || '';
 	}
-   	set category(value: ProductCategory){//изменено
+	set category(value: ProductCategory){//изменено
 		this._category.classList.replace('card__category_soft', ProductsCategories[value]);
 		this.setText(this._category, value)
 	};
-	
-
-	
 	//удалено сетпрайс и сетдескриптион и сеткатегори
-  
 }

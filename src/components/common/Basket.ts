@@ -5,13 +5,12 @@ import { EventEmitter } from '../base/view/Events';
 
 interface IBasketView {
 	products: HTMLElement[];
-	total: number;
-	selected: string[];
+	total: number | string;
 }
 export class Basket extends Component<IBasketView> {
 	protected _products: HTMLElement;
-	 _total: HTMLElement;
-	protected _button: HTMLElement;
+	protected _total: HTMLElement;
+	protected _button: HTMLButtonElement;
 
 	constructor(container: HTMLElement, protected events: EventEmitter) {
 		super(container);
@@ -26,15 +25,23 @@ export class Basket extends Component<IBasketView> {
 		}
 	}
 	set products(products: HTMLElement[]) {
-		products.length ? this._products.replaceChildren(...products) :  this._products.replaceChildren(createElement<HTMLParagraphElement>('p', {
-			textContent: 'Корзина пуста'
-		}));
+		if (products.length) {
+			this._products.replaceChildren(...products)
+			this._button.disabled = false;
+		} else {
+			this._button.disabled = true;
+			this._products.replaceChildren(createElement<HTMLParagraphElement>('p', {
+				textContent: 'Корзина пуста'
+			}));
+		}
 	}
-	set total(total: number) {
-		this.setText(this._total,`${total} синапсов`); 
+	set total(total: number | string) {
+		if (typeof total === 'string') {
+			this._button.disabled = true;
+			this.setText(this._total, 'Стоимость заказа слишком высока')
+		} else {
+			this._button.disabled = false;
+			this.setText(this._total,`${total} синапсов`);
+		}
 	}
-	set selected(products: string[]) {
-        products.length? this.setDisabled(this._button, false):  this.setDisabled(this._button, true);
-	}
-
 }
