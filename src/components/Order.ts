@@ -20,25 +20,28 @@ export class Order extends Form<IOrder> {
 		this._cashButton = this.container.querySelector('[name="cash"]');
 		this._cardButton = this.container.querySelector('[name="card"]');
 		this._address = this.container.querySelector('[name="adress"]');
-		if (state?.onClickPayment) {
-			this._cardButton.addEventListener('click', state.onClickPayment);
-			this._cashButton.addEventListener('click', state.onClickPayment);
+		if (this._cashButton) {
+			this._cashButton.addEventListener('click', () => {
+				if (this._cardButton.classList.contains('button_alt-active'))
+				{
+					this._cardButton.classList.remove('button_alt-active')
+				}
+				this._cashButton.classList.add('button_alt-active')
+				this.onInputChange('payment', 'cash')
+			})
 		}
-	}
-
-	set payment(buttonType: string) {
-		if (buttonType === 'cash') {
-			this._paymentTypes = 'cash';
+		if (this._cardButton) {
+			this._cardButton.addEventListener('click', () => {
+				if (this._cashButton.classList.contains('button_alt-active'))
+				{
+					this._cashButton.classList.remove('button_alt-active')
+				}
+				this._cardButton.classList.add('button_alt-active')
+				this.onInputChange('payment', 'card')
+			})
 		}
-		this._paymentTypes = 'online';
 	}
 	toggleCashButton() {
 		this.toggleClass(this._cashButton, 'button_alt-active');
-	}
-	toggleCardButton() {
-		this.toggleClass(this._cardButton, 'button_alt-active');
-	}
-	set adress(adress: string) {
-		this._address.value = adress;
 	}
 }

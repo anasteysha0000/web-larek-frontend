@@ -33,7 +33,7 @@ export interface IOrder extends IContacts {
 	payment: ProductPayment;
 	address: string;
 	total: number | null;
-	items: string[];
+	items: IProduct[];
 }
 
 export type FormErrors = Partial<Record<keyof IOrder, string>>;

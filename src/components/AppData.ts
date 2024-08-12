@@ -12,10 +12,10 @@ export class AppData extends Model<IAppState>{
 	_products: IProduct[];
 	
 	_order: IOrder = {
-		payment:"online",
-		email: "",
-		phone: "",
-		address: "",
+		payment:'online',
+		email: '',
+		phone: '',
+		address: '',
 		items: [],
 		total: 0
 	};
@@ -51,7 +51,7 @@ export class AppData extends Model<IAppState>{
 		const exists = this._basket.itemsBasket.some(item => item.id === product.id);
         if (!exists) {
             this._basket.itemsBasket.push(product);
-			this._basket.totalBasket += product.price;
+				this._basket.totalBasket += product.price;
 		  	this.emitChanges('basket:change', this._basket);
         } 
 	}

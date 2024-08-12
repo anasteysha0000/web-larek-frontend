@@ -64,6 +64,15 @@ events.on('items:changed', () => {
 	});
 });
 
+events.on('order:select', () => {
+	return modal.render({
+		content: order.render({
+			address: appData._order.address,
+			valid: false, 
+			errors: []
+		})
+	})
+})
 events.on('preview:changed', (item: IProduct) => {
     const card = new Card(cloneTemplate(cardPreviewTemplate), {
         onClick: () => {
@@ -90,37 +99,12 @@ events.on('preview:changed', (item: IProduct) => {
         })
     });
 });
-events.on('cart:select', (item: IProduct) => {
-    const card = new Card(cloneTemplate(cardPreviewTemplate), {
-        onClick: () => {
-            if (appData.addProductToBasket2(item)) {
-                card.setTextq('В корзину');
-                events.emit('basket:add', item);
-            } else {
-                card.setTextq('Удалить из корзины');
-                events.emit('card:deletefromcart', item);
-            }
-        } 
-    });
-	appData.addProductToBasket2(item) ? card.setTextq('В корзину'):card.setTextq('Удалить из корзины');
-    return modal.render({
-        content: card.render({
-            id: item.id,
-            description: item.description,
-            price: item.price,
-            image: item.image,
-            title: item.title,
-            category: item.category,
-        })
-    });
-}); 
-
-
 
 
 events.on('basket:add', (item: IProduct) => {
 	appData.addProductToBasket(item);
 	page.counter = appData._basket.itemsBasket.length
+	modal.close()
 	//modal.toggleCartBtn(item.selected)
 })
 events.on('card:deletefromcart', (item: IProduct) => {

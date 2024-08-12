@@ -25,7 +25,6 @@ export class Card extends Component<IProduct> {
 		this._category = element.querySelector('.card__category');
 		this._description = element.querySelector('.card__text');
 		this._button = element.querySelector(`.card__button`);
-		this._button = element.querySelector(`.card__button`);
 		this._index =element.querySelector('.basket__item-index');
 
 		if (state?.onClick) {
