@@ -104,6 +104,25 @@ events.on('order:submit', () => {
 	})
 })
 
+events.on('order:submit', () => {
+    api.postOrder(appData._order)
+      .then((result) => {
+        appData.clearBasket();
+        const success = new Success(cloneTemplate(successTemplate), {
+            onClick: () => {
+                modal.close();
+            }
+        });
+        success.total = result.totalPrice.toString();
+        modal.render({
+            content: success.render({})
+        });
+      })
+      .catch(error => {
+          console.log(error);
+      });
+})
+
 events.on('preview:changed', (item: IProduct) => {
     const card = new Card(cloneTemplate(cardPreviewTemplate), {
         onClick: () => {
