@@ -31,7 +31,7 @@ export interface IContacts {
 }
 export interface IOrder extends IContacts, IAddress {
 	total: number | null;
-	items: IProduct[];
+	items: string[];
 }
 export interface IOrderForms{
 	payment: string;

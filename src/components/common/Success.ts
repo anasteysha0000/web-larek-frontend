@@ -3,7 +3,7 @@ import { Component } from "../base/view/Component";
 
 
 interface ISuccess {
-	total: number;
+	total: number | null;
 }
 
 interface ISuccessActions {

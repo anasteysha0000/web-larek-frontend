@@ -96,15 +96,18 @@ events.on('order:select', () => {
 	})
 })
 events.on('order:submit', () => {
+	appData._order.total = appData.getTotal()
+	appData._order.items = appData._basket.itemsBasket.map(i => i.id)
 	return modal.render({
 		content: contacts.render({
 			valid: false, 
 			errors: []
+
 		})
 	})
 })
 
-events.on('order:submit', () => {
+events.on('contacts:submit', () => {
     api.postOrder(appData._order)
       .then((result) => {
         appData.clearBasket();
@@ -113,9 +116,11 @@ events.on('order:submit', () => {
                 modal.close();
             }
         });
-        success.total = result.totalPrice.toString();
+       
         modal.render({
-            content: success.render({})
+            content: success.render({
+				total: result.total
+			})
         });
       })
       .catch(error => {
