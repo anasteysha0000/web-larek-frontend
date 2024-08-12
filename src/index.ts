@@ -15,8 +15,8 @@ import './scss/styles.scss';
 import { IProduct } from './types/models/Api';
 import { API_URL, CDN_URL } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
-import { ProductCategory } from './types/models/App';
-
+import { IAddress, IContacts, IOrder, ProductCategory } from './types/models/App';
+import {ProductPayment} from './types/models/App'
 // Инициализация событий и API
 const events = new EventEmitter();
 const api = new WebLarekApi(CDN_URL, API_URL);
@@ -41,6 +41,7 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 const basket = new Basket(cloneTemplate(basketTemplate), events);
 const order = new Order(cloneTemplate(deliveryTemplate), events, {
     onClickPayment: (ev: Event) => events.emit('payment:toggle', ev.target)
+
 });
 const contacts = new Contacts(cloneTemplate(contactTemplate), events);
 
@@ -64,6 +65,33 @@ events.on('items:changed', () => {
 	});
 });
 
+
+events.on('formErrors:change', (errors: Partial<IOrder>) => {
+    const { email, phone} = errors;
+	const {payment, address} = errors;
+    contacts.valid = !email && !phone;
+	order.valid = !payment && !address;
+    contacts.errors = Object.values({phone, email}).filter(i => !!i).join('; ');
+	order.errors = Object.values({payment, address}).filter(i => !!i).join('; ');
+});
+
+// Изменилось одно из полей
+events.on(/^order\..*:change/, (data: { field: keyof IAddress, value: string }) => {
+    appData.setOrderField(data.field, data.value);
+});
+events.on('payment:take', (data: { payment: string }) => {
+	appData.setOrderField('payment', data.payment);
+});
+//events.on(/^contacts\..*:change/, (data: {field: keyof IContacts, value: string}) => {
+  //  appData.setOrderField(data.field, data.value)
+//})
+events.on('payment:toggle', (target: HTMLElement) => {
+	if(!target.classList.contains('button_alt-active')){
+		order.toggleButtons();
+	
+	  }
+})
+
 events.on('order:select', () => {
 	return modal.render({
 		content: order.render({
@@ -76,7 +104,7 @@ events.on('order:select', () => {
 events.on('preview:changed', (item: IProduct) => {
     const card = new Card(cloneTemplate(cardPreviewTemplate), {
         onClick: () => {
-			if (appData.addProductToBasket2) {
+			if (appData.isProductInBasket) {
                 card.setTextq('В корзину');
                 events.emit('basket:add', item);
             } else {
@@ -85,8 +113,7 @@ events.on('preview:changed', (item: IProduct) => {
             }
         }
     });
-	appData.addProductToBasket2 ? card.setTextq('В корзину'):card.setTextq('Удалить из корзины');
-    // card.button.disabled = item.selected;
+	appData.isProductInBasket ? card.setTextq('В корзину'):card.setTextq('Удалить из корзины');
     return modal.render({
         content: card.render({
             id: item.id,
@@ -95,7 +122,6 @@ events.on('preview:changed', (item: IProduct) => {
             image: item.image,
             title: item.title,
             category: item.category,
-            // selected: item.selected
         })
     });
 });

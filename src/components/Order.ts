@@ -8,8 +8,8 @@ export type TOrderActions = {
 export class Order extends Form<IOrder> {
 	protected _cashButton: HTMLButtonElement;
 	protected _cardButton: HTMLButtonElement;
-	protected _paymentTypes: string; //изменено
-	protected _address: HTMLInputElement; //изменено
+	 _paymentTypes: string; //изменено
+	 _address: HTMLInputElement; //изменено
 	constructor(
 		container: HTMLFormElement,
 		events: IEvents,
@@ -41,7 +41,8 @@ export class Order extends Form<IOrder> {
 			})
 		}
 	}
-	toggleCashButton() {
-		this.toggleClass(this._cashButton, 'button_alt-active');
-	}
+	toggleButtons(){
+		this._cardButton.classList.toggle('button_alt-active');
+		this._cashButton.classList.toggle('button_alt-active');
+	  }
 }

@@ -1,5 +1,5 @@
 import { IProduct } from "../types/models/Api";
-import { FormErrors, IBasket, IContacts, IOrder, ProductPayment } from "../types/models/App";
+import { FormErrors, IAddress, IBasket, IContacts, IOrder, ProductPayment } from "../types/models/App";
 import { IEvents } from "./base/view/Events";
 import { Model } from "./base/view/Model";
 export interface IAppState {
@@ -55,7 +55,7 @@ export class AppData extends Model<IAppState>{
 		  	this.emitChanges('basket:change', this._basket);
         } 
 	}
-	addProductToBasket2(product: IProduct) {
+	isProductInBasket(product: IProduct) {
 		const exists = this._basket.itemsBasket.some(item => item.id === product.id);
         if (!exists) {
           return true
@@ -89,7 +89,7 @@ export class AppData extends Model<IAppState>{
 	  }
 	
 	  isOrderValidForm(){
-		this._formErrors = {};
+		const errors: typeof this._formErrors = {};
 		this.validateField('address', 'Необходимо указать адрес');
 		this.validateField('payment', 'Необходимо указать тип оплаты');
 		this.validateField('email', 'Необходимо указать электронную почту');
@@ -97,9 +97,8 @@ export class AppData extends Model<IAppState>{
 		this.emitChanges('orderErrors:change', this._formErrors); //добавить в документацию событие
 		return Object.keys(this._formErrors).length === 0;
 	  }
-	setOrderField(field: keyof IContacts, value: string) {
+	setOrderField(field: keyof IAddress, value: string) {
 		this._order[field] = value;
-
         if (this.isOrderValidForm()) {
             this.emitChanges('order:ready', this._order);
         }

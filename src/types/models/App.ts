@@ -29,11 +29,13 @@ export interface IContacts {
 	email: string;
 	phone: string;
 }
-export interface IOrder extends IContacts {
-	payment: ProductPayment;
-	address: string;
+export interface IOrder extends IContacts, IAddress {
 	total: number | null;
 	items: IProduct[];
+}
+export interface IAddress{
+	payment: string;
+	address: string;
 }
 
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
