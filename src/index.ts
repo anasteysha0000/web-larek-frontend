@@ -119,7 +119,7 @@ events.on('contacts:submit', () => {
        
         modal.render({
             content: success.render({
-				total: result.total
+							total: result.total
 			})
         });
       })

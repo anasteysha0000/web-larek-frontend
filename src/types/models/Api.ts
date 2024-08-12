@@ -14,6 +14,6 @@ export interface IProduct{
 
 export interface IPostOrder{
     id: string;
-    totalPrice: number|null;
+    total: number;
 }
 
