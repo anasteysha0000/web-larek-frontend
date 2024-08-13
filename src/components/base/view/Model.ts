@@ -1,11 +1,11 @@
 import { IEvents } from './Events';
 
-export const isModel = (obj: unknown): obj is Model<any> => {
+export const isModel = (obj: unknown): obj is Model<unknown> => {
 	return obj instanceof Model;
 };
 
 export abstract class Model<T> {
-	constructor(data: Partial<T>, protected events: IEvents) {
+	protected constructor(data: Partial<T>, protected events: IEvents) {
 		Object.assign(this, data);
 	}
 

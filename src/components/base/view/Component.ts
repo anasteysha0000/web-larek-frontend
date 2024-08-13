@@ -1,7 +1,6 @@
 export abstract class Component<T> {
 	protected constructor(protected readonly container: HTMLElement) {}
-
-	//удален toggleClass
+	
 	protected setText(element: HTMLElement, value: unknown) {
 		if (element) {
 			element.textContent = String(value);

@@ -11,7 +11,6 @@ export class Order extends Form<IOrder> {
 		container: HTMLFormElement,
 		events: IEvents,
 	) {
-		//изменено
 		super(container, events);
 		this._cashButton = this.container.querySelector('[name="cash"]');
 		this._cardButton = this.container.querySelector('[name="card"]');

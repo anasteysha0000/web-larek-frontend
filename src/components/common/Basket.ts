@@ -6,6 +6,7 @@ interface IBasketView {
 	products: HTMLElement[];
 	total: number | string;
 }
+
 export class Basket extends Component<IBasketView> {
 	protected _products: HTMLElement;
 	protected _total: HTMLElement;

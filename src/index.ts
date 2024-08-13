@@ -60,11 +60,11 @@ events.on('items:changed', () => {
 
 
 events.on('formErrors:change', (errors: Partial<IOrder>) => {
-    const { email, phone} = errors;
+	const { email, phone} = errors;
 	const {payment, address} = errors;
-    contacts.valid = !email && !phone;
+	contacts.valid = !email && !phone;
 	order.valid = !payment && !address;
-    contacts.errors = Object.values({phone, email}).filter(i => !!i).join('; ');
+	contacts.errors = Object.values({phone, email}).filter(i => !!i).join('; ');
 	order.errors = Object.values({payment, address}).filter(i => !!i).join('; ');
 });
 

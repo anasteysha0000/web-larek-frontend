@@ -124,7 +124,7 @@ export class AppData extends Model<IAppState> {
 	private isOrderValidForm(): boolean {
 		if (this.validateEmptyField('address', 'Необходимо указать адрес')) {
 			this.validateFieldRegex(
-				'email',
+				'address',
 				'Некорректный формат адреса',
 				regexPatterns[RegexEnum.Address]
 			);
