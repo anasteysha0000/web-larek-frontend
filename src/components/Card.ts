@@ -40,47 +40,47 @@ export class Card extends Component<IProduct> {
 		this.button.textContent = value;
 	}
 
-	public get button(): HTMLButtonElement {
+	get button(): HTMLButtonElement {
 		return this._button;
 	}
-	public set index(value: string) {
+	set index(value: string) {
 		this._index.textContent = value;
 	}
 
-	public get index(): string {
+	get index(): string {
 		return this._index.textContent || '';
 	}
-	public set id(value: string) {
+	set id(value: string) {
 		this.container.dataset.id = value;
 	}
 
-	public get id(): string {
+	get id(): string {
 		return this.container.dataset.id || '';
 	}
-	public set title(value: string) {
+	set title(value: string) {
 		this.setText(this._title, value);
 	}
-	public get title(): string {
+	get title(): string {
 		return this._title.textContent || '';
 	}
-	public set price(value: string) {
+	set price(value: string) {
 		value === null
 			? this.setText(this._price, 'Бесценно')
 			: this.setText(this._price, `${value} синапсов`);
 	}
-	public get price(): string {
+	get price(): string {
 		return this._price.textContent || '';
 	}
-	public set image(value: string) {
-		this.setImage(this._image, value, this.title); 
+	set image(value: string) {
+		this.setImage(this._image, value, this.title);
 	}
-	public set description(value: string) {
+	set description(value: string) {
 		this.setText(this._description, value);
 	}
-	public get description(): string {
+	get description(): string {
 		return this._description.textContent || '';
 	}
-	public set category(value:keyof typeof ProductsCategories) {
+	set category(value: keyof typeof ProductsCategories) {
 		this._category.classList.replace(
 			'card__category_soft',
 			ProductsCategories[value]

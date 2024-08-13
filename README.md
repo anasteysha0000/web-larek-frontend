@@ -156,7 +156,23 @@ export interface IPostOrder {
 Интерфейс, описывающий ответ API при создании заказа.
 
 
+```typescript
+export enum RegexEnum {
+	Email = '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$',
+	PhoneNumber = '^((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10}$',
+	  Address = '^[А-Яа-я0-9, ]+$'
+}
+```
+Перечисление, которое содержит три значения, каждое из которых представляет собой регулярное выражение для проверки формата данных такие как: email, номер телефона и адрес.
 
+```typescript
+export const regexPatterns = {
+	[RegexEnum.Email]: new RegExp(RegexEnum.Email),
+	[RegexEnum.PhoneNumber]: new RegExp(RegexEnum.PhoneNumber),
+	[RegexEnum.Address]: new RegExp(RegexEnum.Address)
+};
+```
+Объект, который создает экземпляры регулярных выражений на основе значений из RegexEnum. 
 
 ```typescript
 export interface IWebLarekApi {
@@ -499,7 +515,7 @@ public removeProductInBasket(product: IProduct): void {}
 Удаляет продукт из корзины.
 
 ```typescript
-clearBasket(): void {}
+public clearBasket(): void {}
 ```
 Очищает корзину, удаляя все продукты из нее.
 
@@ -536,18 +552,18 @@ public setOrderField(field: keyof IOrderForms, value: string): void {}
 - `Form`
 
 ```typescript
-constructor(container: HTMLElement)
+constructor(container: HTMLElement){}
 ```
 - container — HTML-элемент, который будет использоваться в качестве контейнера для компонента.
 #### Методы
 
 ```typescript
-setText(element: HTMLElement, value: unknown): void
+protected setText(element: HTMLElement, value: unknown): void
 ```
 Метод для установки текста в элемент.
 
 ```typescript
-setDisabled(element: HTMLElement, state: boolean): void
+protected setDisabled(element: HTMLElement, state: boolean): void
 ```
 Метод для установки состояния "disabled" у элемента.
 
@@ -587,13 +603,13 @@ constructor(container: HTMLElement, protected events: EventEmitter) {}
 ```typescript
 set products(products: HTMLElement[])
 ```
-Метод для установки списка продуктов в корзине.
+Сеттер для установки списка продуктов в корзине.
 
 
 ```typescript
-public set total(total: number | string){}
+set total(total: number | string){}
 ```
-Метод для установки общей стоимости товаров в корзине.
+Сеттер для установки общей стоимости товаров в корзине.
 
 
 ## Класс Form
@@ -615,18 +631,15 @@ protected onInputChange(field: keyof T, value: string): void
 
 Метод, который вызывается при изменении значения в поле ввода. Этот метод можно переопределить в подклассах для реализации конкретной логики обработки изменений.
 
-- field: keyof T -  Имя поля ввода, в котором произошло изменение.
-- value: string -  Новое значение поля ввода.
-
 ```typescript
-public set valid(value: boolean)
+set valid(value: boolean)
 ```
 
 Сеттер для установки валидности формы. Может быть использован для включения или отключения кнопки отправки формы в зависимости от валидности.
 
 
 ```typescript
-public set errors(value: string)
+set errors(value: string)
 ```
 
 Сеттер для установки ошибок формы. Может быть использован для отображения ошибок пользователю.
@@ -656,12 +669,10 @@ constructor(container: HTMLElement, protected events: IEvents){}
 #### Методы
 
 ```typescript
-public set content(value: HTMLElement)
+set content(value: HTMLElement)
 ```
 
 Сеттер для установки содержимого модального окна. При вызове этого метода содержимое модального окна будет обновлено.
-
-
 
 ```typescript
 public open(): void
@@ -672,7 +683,6 @@ public open(): void
 ```typescript
 public close(): void
 ```
-
 Метод для закрытия модального окна. Этот метод скрывает модальное окно и делает его неактивным.
 
 ```typescript
@@ -699,7 +709,7 @@ constructor(container: HTMLElement, actions: ISuccessActions)
 #### Методы
 
 ```typescript
-public set total(value: string) {
+set total(value: string) {
 		this._total.textContent = `Списано ${value} синапсов`;
 	}
 ```
@@ -738,56 +748,56 @@ public setTextButton(value: string): void {
 Метод устанавливает текстовое содержимое кнопки. 
 
 ```typescript
-	public get button(): HTMLButtonElement {
+	 get button(): HTMLButtonElement {
 		return this._button;
 	}
 ```
 Геттер, который возвращает приватное свойство _button, представляющее элемент HTMLButtonElement
 
 ```typescript
-public set index(value: string) {
+ set index(value: string) {
 		this._index.textContent = value;
 	}
 ```
 Сеттер, который устанавливает значение индекса товара.
 
 ```typescript
-public get index(): string {
+ get index(): string {
 		return this._index.textContent || '';
 	}
 ```
 Геттер, возвращает текстовое содержимое элемента, связанного с индексом товара.
 
 ```typescript
-	public set id(value: string) {
+	 set id(value: string) {
 		this.container.dataset.id = value;
 	}
 ```
 Сеттер, устанавливает значение атрибута data-id элемента.
 
 ```typescript
-public get id(): string {
+ get id(): string {
 		return this.container.dataset.id || '';
 	}
 ```
 Геттер, возвращает текущее значение атрибута data-id элемента.
 
 ```typescript
-public set title(value: string) {
+ set title(value: string) {
 		this.setText(this._title, value);
 	}
 ```
 Сеттер, устанавливает текстовое содержимое элемента.
 
 ```typescript
-public get title(): string {
+ get title(): string {
 		return this._title.textContent || '';
 	}
 ```
 Геттер, возвращает текущее текстовое содержимое элемента.
 
 ```typescript
-public set price(value: string) {
+ set price(value: string) {
 		value === null
 			? this.setText(this._price, 'Бесценно')
 			: this.setText(this._price, `${value} синапсов`);
@@ -796,21 +806,21 @@ public set price(value: string) {
 Сеттер, который устанавливает текстовое содержимое элемента, связанного с ценой.
 
 ```typescript
-public get price(): string {
+ get price(): string {
 		return this._price.textContent || '';
 	}
 ```
 Геттер, возвращает текущее текстовое содержимое элемента.
 
 ```typescript
-	public set image(value: string) {
+	 set image(value: string) {
 		this.setImage(this._image, value, this.title); 
 	}
 ```
 Сеттер,  который устанавливает значения свойства изображения в объекте.
 
 ```typescript
-	public set description(value: string) {
+	 set description(value: string) {
 		this.setText(this._description, value);
 	}
 ```
@@ -818,14 +828,14 @@ public get price(): string {
 
 
 ```typescript
-	public get description(): string {
+	 get description(): string {
 		return this._description.textContent || '';
 	}
 ```
 Геттер, используется для получения текущего значения свойства описания из объекта.
 
 ```typescript
-	public set category(value:keyof typeof ProductsCategories) {
+	 set category(value:keyof typeof ProductsCategories) {
 		this._category.classList.replace(
 			'card__category_soft',
 			ProductsCategories[value]
@@ -848,11 +858,11 @@ constructor(element: HTMLElement, state: IContacts)
 - state (IContacts): Объект состояния, содержащий начальные данные контактной информации.
 #### Методы
 ```typescript
-public set email(value: string)
+ set email(value: string)
 ```
 Метод для установки значения электронной почты в форме контактов. Этот метод позволяет обновить контактную информацию пользователя, задав новое значение электронной почты.
 ```typescript
-public set phone(value: string)
+ set phone(value: string)
 ```
 Метод для установки значения телефонного номера в форме контактов. Этот метод позволяет обновить контактную информацию пользователя, задав новое значение телефонного номера.
 
@@ -887,16 +897,16 @@ constructor(container: HTMLElement, protected events: IEvents){}
 - _basket: HTMLElement HTMLElement HTML-элемент, представляющий корзину покупок.
 #### Методы
 ```typescript
-public set catalog(items: HTMLElement[]) {}
+ set catalog(items: HTMLElement[]) {}
 ```
 Сеттер для установки элементов каталога.
 ```typescript
-public set counter(value: number){}
+ set counter(value: number){}
 ```
 Сеттер для установки значения счетчика товаров в корзине.
 
 ```typescript 
-public set locked(value: boolean) {}
+ set locked(value: boolean) {}
 ```
 Сеттер, для блокировки страницы на основе переданного значения.
 

@@ -26,7 +26,7 @@ export class Basket extends Component<IBasketView> {
 			});
 		}
 	}
-	public set products(products: HTMLElement[]) {
+	set products(products: HTMLElement[]) {
 		if (products.length) {
 			this._products.replaceChildren(...products);
 			this._button.disabled = false;
@@ -39,7 +39,7 @@ export class Basket extends Component<IBasketView> {
 			);
 		}
 	}
-	public set total(total: number | string){
+	set total(total: number | string){
 		if (typeof total === 'string') {
 			this._button.disabled = true;
 			this.setText(this._total, 'Стоимость заказа слишком высока');

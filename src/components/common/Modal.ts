@@ -22,7 +22,7 @@ export class Modal extends Component<IModalData> {
 		this._content.addEventListener('click', (event) => event.stopPropagation());
 	}
 
-	public set content(value: HTMLElement) {
+	set content(value: HTMLElement) {
 		this._content.replaceChildren(value);
 	}
 

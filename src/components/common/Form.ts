@@ -38,11 +38,11 @@ export class Form<T> extends Component<IFormState> {
 		});
 	}
 
-	public set valid(value: boolean) {
+	set valid(value: boolean) {
 		this._submit.disabled = !value;
 	}
 
-	public set errors(value: string) {
+	set errors(value: string) {
 		this.setText(this._errors, value);
 	}
 
