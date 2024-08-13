@@ -129,7 +129,8 @@ events.on('preview:changed', (item: IProduct) => {
                 events.emit('basket:add', item);
             } else {
                 card.setTextButton('Удалить из корзины');
-                events.emit('basket:delete', item)
+                events.emit('basket:delete', item);
+								modal.close();
             }
         }
     });
