@@ -320,7 +320,7 @@ post(uri: string, data: object, method: ApiPostMethods = 'POST') {
 ```typescript
 constructor(cdn: string, baseUrl: string, options?:RequestInit){}
 ```
- - cdn: string - URL для загрузки изображений товаров
+ - cdn: string - базовый путь до места хранения изображений.
  - baseUrl: string - Базовый URL для API.
   - options: RequestInit - Опции для настройки HTTP-запросов (например, заголовки, метод, тело запроса и т.д.).
 
