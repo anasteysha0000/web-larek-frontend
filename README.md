@@ -42,20 +42,16 @@ yarn build
 ```
 ## Интерфейсы и типы данных, используемые в приложении
 
-
-
-
 ```typescript
-export type ProductCategory =
-  | 'хард-скил'
-  | 'софт-скил'
-  | 'дополнительное'
-  | 'кнопка'
-  | 'другое';
+export enum ProductsCategories {
+	'хард-скил' = 'card__category_hard',
+	'дополнительное' = 'card__category_additional',
+	'кнопка' = 'card__category_button',
+	'другое' = 'card__category_other',
+	'софт-скил' = 'card__category_soft'
+}
 ```
-Тип, представляющий категории продуктов.
-
-
+Перечисление категорий продуктов.
 
 ```typescript
 export type ProductPayment =
@@ -66,21 +62,24 @@ export type ProductPayment =
 
 
 ```typescript
-export interface IProduct {
-  id: string;
-  description: string;
-  image: string;
-  title: string;
-  category: ProductCategory;
-  price: number;
+export interface IProduct{
+    id: string;
+    description: string;
+    image: string;
+    title: string;
+    category: ProductsCategories;
+    price: number;
+    button: string;
+    index: string;
+    selected: boolean;
 }
 ```
 Интерфейс, описывающий продукт.
 
 ```typescript
 export interface IBasket {
-  itemsBasket: [IProduct, string, number][];
-  totalBasket: number | null;
+	itemsBasket: IProduct[]
+	totalBasket: number | null;
 }
 ```
 Интерфейс, описывающий корзину покупок.
@@ -93,47 +92,46 @@ interface IContacts {
 ```
 Интерфейс, описывающий контактную информацию.
 
+```typescript 
+export interface IAddress{
+	payment: string;
+	address: string;
+}
+```
+Интерфейс, описывающий адрес и тип оплаты.
 
+```typescript
+export interface IOrder extends IContacts, IAddress {
+	total: number | string;
+	items: string[];
+}
+```
+Интерфейс, описывающий заказ. Наследует `IContacts` и `IAddress`.
+
+```typescript
+export interface IOrderForms{
+	payment: string;
+	address: string;
+	email: string;
+	phone: string;
+}
+```
+Интерфейс для описания формы заказа.
 
 
 ```typescript
-interface IOrder extends IContacts {
-  payment: ProductPayment;
-  address: string;
-  total: number | null;
-  items: string[];
-}
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
 ```
-Интерфейс, описывающий заказ. Наследует `IContacts`.
-
+Тип, представляющий объект с возможными ошибками формы, где ключи соответствуют полям интерфейса IOrder, а значения — строками с сообщениями об ошибках.
 
 ```typescript
-enum AppStateModals {
-  product = 'modal:product',
-  basket = 'modal:basket',
-  payment = 'modal:payment',
-  contacts = 'modal:contacts',
-  postOrder = 'modal:postOrder',
+export interface IPage {
+    counter: number;
+    catalog: HTMLElement[];
+    locked: boolean;
 }
 ```
-Перечисление, описывающее возможные модальные окна в приложении.
-
-
-
-
-```typescript
-export enum AppStateChanges {
-  products = 'change:products',
-  modal = 'change:modal',
-  modalMessage = 'change:modalMessage',
-  selectedProduct = 'change:selectedProduct',
-  basket = 'change:basket',
-  order = 'change:order',
-}
-```
-Перечисление, описывающее возможные изменения состояния приложения.
-
-
+Тип, представляющий состояние страницы в веб-приложении.
 
 
 ```typescript
@@ -144,21 +142,15 @@ export type ApiListResponse<Type> = {
 ```
 Тип, представляющий ответ API со списком элементов.
 
-
-
-
 ```typescript
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 ```
 Тип, представляющий методы HTTP-запросов для изменения данных.
 
-
-
-
 ```typescript
 export interface IPostOrder {
     id: string;
-    totalPrice: number|null;
+    total: number;
 }
 ```
 Интерфейс, описывающий ответ API при создании заказа.
@@ -168,9 +160,9 @@ export interface IPostOrder {
 
 ```typescript
 export interface IWebLarekApi {
-    getProductList(): Promise<ApiListResponse<IProduct>>;
-    getProductItem(): Promise<IProduct>;
-    postOrder() : Promise<IPostOrder>;
+	getProductList: () => Promise<IProduct[]>;
+	getProductItem: (id: string) => Promise<IProduct>;
+	postOrder: (order: IOrder) => Promise<IPostOrder>;
 }
 ```
 Интерфейс, описывающий методы API.
@@ -179,7 +171,6 @@ export interface IWebLarekApi {
   type EventName = string | RegExp;
   ```
 Тип, представляющий имя события. Может быть строкой или регулярным выражением.
-
 
   ```typescript
   type Subscriber = Function;
@@ -219,7 +210,6 @@ interface ISuccess {
   total: number;
 }
 ```
-
 Интерфейс ISuccess описывает данные, которые будут переданы компоненту Success. 
 
 ```typescript
@@ -312,25 +302,24 @@ post(uri: string, data: object, method: ApiPostMethods = 'POST') {
 Интерфейс IWebLarekApi определяет методы для взаимодействия с API интернет-магазина. Эти методы включают получение списка продуктов, получение отдельного продукта и отправку заказа. Наследует класс Api и имплементирует интерфейс IWebLarekApi.
 
 ```typescript
-constructor(baseUrl: string, options: RequestInit){
-        super(baseUrl,options)
-    }
+constructor(cdn: string, baseUrl: string, options?:RequestInit){}
 ```
+ - cdn: string - URL для загрузки изображений товаров
  - baseUrl: string - Базовый URL для API.
   - options: RequestInit - Опции для настройки HTTP-запросов (например, заголовки, метод, тело запроса и т.д.).
 
 #### Методы
 ```typescript
-getProductList(id:string): Promise<ApiListResponse<IProduct>> {}
+public getProductList = (): Promise<IProduct[]>{}
 ```
 Метод для получения списка продуктов по идентификатору.
 
 ```typescript
-getProductItem(): Promise<IProduct>
+public getProductItem = (id: string): Promise<IProduct> 
 ```
 Метод для получения информации о конкретном продукте.
 ```typescript
-postOrder(order: IPostOrder): Promise<IPostOrder>
+public postOrder = (order: IOrder): Promise<IPostOrder>
 ```
 Метод для отправки POST-запроса.
 
@@ -457,8 +446,9 @@ emitChanges(event: string, payload?: object): void
  
 
 ```typescript
-constructor(events: IEvents)
+constructor(data: object, events: IEvents){}
 ```
+- data: объект, который может содержать любые данные, передаваемые в класс.
 - events: IEvents - объект, реализующий интерфейс событий, который используется для управления событиями в приложении.
 #### Поля
 - _products: IProduct[] представляет собой массив продуктов доступных в каталоге.
@@ -470,86 +460,68 @@ constructor(events: IEvents)
 #### Методы
 
 ```typescript
-setCatalog(items: IProduct[]): void
+public setProducts(items: IProduct[]): void {}
 ```
-Устанавливает каталог продуктов.
-
-- items: IProduct[] - массив продуктов, который будет установлен в качестве каталога.
+Обновляет список товаров.
 
 ```typescript
-setPreview(id: string | null): void
+public setPreview(items: IProduct): void {}
 ```
 Устанавливает продукт для предварительного просмотра.
-
-- id: string | null - идентификатор продукта для предварительного просмотра. Если значение null, предварительный просмотр сбрасывается.
-
 ```typescript
-setTotal(): void
-```
-Вычисляет и устанавливает общую стоимость заказа на основе продуктов в корзине.
-
-```typescript
-setContacts(email: string, phone: string): void
-```
-
-Устанавливает контактные данные пользователя.
-
-
-```typescript
-setPayment(type: ProductPayment): void
-```
-Устанавливает тип оплаты для заказа.
-
-- type: ProductPayment - тип оплаты ("online" или "cash").
-
-```typescript
-getProduct(cardId: string): IProduct | undefined
-```
-Возвращает продукт по его идентификатору.
-
-- cardId: string - идентификатор продукта.
-- Возвращает объект продукта или undefined, если продукт не найден.
-
-```typescript
-addProduct(product: IProduct): void
+public addProductToBasket(product: IProduct): void {}
 ```
 Добавляет продукт в корзину.
 
-- product: IProduct - объект продукта, который будет добавлен в корзину.
+```typescript
+private isProductPriceless(product: IProduct): boolean {}
+```
+Проверяет, имеет ли продукт цену.
 
 ```typescript
-removeProduct(product: IProduct): void
+private isBasketHaveProductPriceless(): boolean {}
 ```
+Проверяет, содержит ли корзина продукты без цены.
 
+```typescript
+public isProductInBasket(product: IProduct): boolean {}
+```
+Проверяет наличие продукта в корзине.
+
+```typescript
+public getTotal() {}
+```
+Вычисляет общую стоимость товаров в корзине. 
+
+```typescript
+public removeProductInBasket(product: IProduct): void {}
+```
 Удаляет продукт из корзины.
 
-- product: IProduct - объект продукта, который будет удален из корзины.
-
 ```typescript
-clearBasket(): void
+clearBasket(): void {}
 ```
-
 Очищает корзину, удаляя все продукты из нее.
 
 ```typescript
-isOrderValidForm()
+private validateEmptyField(field: keyof IOrder, errorMessage: string): boolean {}
 ```
-
-Проверяет, является ли форма заказа действительной.
-
-- Возвращает true, если форма заказа действительна, иначе false.
-
-
+Проверяет, заполнено ли указанное поле объекта заказа.
 
 ```typescript
-setOrderField(field: keyof IOrder, value: string): void
+private validateFieldRegex(field: keyof IOrder, errorMessage: string, regex: RegExp): boolean {}
 ```
+Проверяет, соответствует ли значение указанного поля объекта заказа заданному регулярному выражению.
 
-Устанавливает значение поля в заказе.
+```typescript
+private isOrderValidForm(): boolean {}
+```
+Проверяет, является ли форма заказа валидной, выполняя валидацию обязательных полей и их соответствие регулярным выражениям.
 
-- field: keyof IOrder - поле заказа, которое необходимо установить.
-- value: string - значение, которое необходимо установить для указанного поля.
-
+```typescript
+public setOrderField(field: keyof IOrderForms, value: string): void {}
+```
+Устанавливает значение поля заказа и проверяет валидность формы.
 
 
 # Отображение
@@ -570,41 +542,20 @@ constructor(container: HTMLElement)
 #### Методы
 
 ```typescript
-toggleClass(element: HTMLElement, className: string, force?: boolean): void
-```
-
-Метод для добавления или удаления CSS-класса у элемента.
-
-- element — HTML-элемент, у которого нужно добавить или удалить класс.
-- className — имя CSS-класса.
-- force — необязательный параметр. Если передан, то добавляет класс, если значение true, и удаляет, если значение false.
-
-```typescript
 setText(element: HTMLElement, value: unknown): void
 ```
-
 Метод для установки текста в элемент.
 
-- element — HTML-элемент, в который нужно установить текст.
-- value — значение текста. Может быть любого типа, но обычно строка или число.
 ```typescript
 setDisabled(element: HTMLElement, state: boolean): void
 ```
-
 Метод для установки состояния "disabled" у элемента.
 
-- element — HTML-элемент, у которого нужно установить состояние.
-- state — логическое значение. Если true, элемент будет отключен; если false, элемент будет включен.
 
 ```typescript
 protected setImage(element: HTMLImageElement, src: string, alt?: string): void
 ```
-
 Метод для установки изображения в элементе <img>.
-
-- element — HTML-элемент <img>, в который нужно установить изображение.
-- src — URL изображения.
-- alt — необязательный параметр. Альтернативный текст для изображения.
 
 ```typescript
 render(data?: Partial<T>): HTMLElement
@@ -622,15 +573,12 @@ render(data?: Partial<T>): HTMLElement
 
 
  ```typescript
- constructor(container: HTMLElement, events: EventEmitter)
+constructor(container: HTMLElement, protected events: EventEmitter) {}
 ```
-
-Конструктор создает экземпляр класса Basket и инициализирует его с заданным контейнером и объектом событий.
-
 - `container`: HTMLElement - HTML-элемент, в который будет помещен компонент корзины.
 - `events`: EventEmitter - объект для управления событиями.
 #### Поля
-- _list: HTMLElement представляет собой HTML-элемент, который будет использоваться для отображения списка продуктов в корзине.
+- _products: HTMLElement представляет собой HTML-элемент, который будет использоваться для отображения списка продуктов в корзине.
 - _total: HTMLElement   представляет собой HTML-элемент, который будет использоваться для отображения общей стоимости товаров в корзине.
 - _button: HTMLElement  представляет собой HTML-элемент, который будет использоваться для выполнения действия, связанного с корзиной.
 
@@ -639,25 +587,13 @@ render(data?: Partial<T>): HTMLElement
 ```typescript
 set products(products: HTMLElement[])
 ```
-
 Метод для установки списка продуктов в корзине.
 
-- products: HTMLElement[] - массив HTML-элементов, представляющих продукты.
 
 ```typescript
-set total(total: number)
+public set total(total: number | string){}
 ```
 Метод для установки общей стоимости товаров в корзине.
-
-- total: number - общая стоимость товаров.
-
-```typescript
-set selected(selected: number)
-```
-
-Метод для установки количества выбранных товаров в корзине.
-
-- selected: number - количество выбранных товаров.
 
 
 ## Класс Form
@@ -683,28 +619,24 @@ protected onInputChange(field: keyof T, value: string): void
 - value: string -  Новое значение поля ввода.
 
 ```typescript
-set valid(value: boolean)
+public set valid(value: boolean)
 ```
 
 Сеттер для установки валидности формы. Может быть использован для включения или отключения кнопки отправки формы в зависимости от валидности.
 
-- value: boolean - Значение, указывающее, валидна ли форма.
 
 ```typescript
-set errors(value: string)
+public set errors(value: string)
 ```
 
 Сеттер для установки ошибок формы. Может быть использован для отображения ошибок пользователю.
 
-- value: string - Строка с ошибками.
 
 ```typescript
-render(state: Partial<T> & IFormState): void
+public render(state: Partial<T> & IFormState): void
 ```
 
 Метод для рендеринга состояния формы. Этот метод может быть использован для обновления интерфейса в соответствии с текущим состоянием формы.
-
-- state: Partial<T> & IFormState -  Объект состояния формы, включающий частичные данные формы и состояние валидности и ошибок.
 
 
 ## Класс Modal
@@ -712,7 +644,7 @@ render(state: Partial<T> & IFormState): void
 Класс Modal предназначен для работы с модальными окнами. Он предоставляет методы для открытия, закрытия и рендеринга содержимого модального окна.
 
 ```typescript
-constructor(container: HTMLElement, protected events: IEvents)
+constructor(container: HTMLElement, protected events: IEvents){}
 ```
 
 - container: HTMLElement -  HTML-элемент, который будет использоваться в качестве контейнера для модального окна.
@@ -724,31 +656,30 @@ constructor(container: HTMLElement, protected events: IEvents)
 #### Методы
 
 ```typescript
-set content(value: HTMLElement)
+public set content(value: HTMLElement)
 ```
 
 Сеттер для установки содержимого модального окна. При вызове этого метода содержимое модального окна будет обновлено.
 
 
-- value: HTMLElement - HTML-элемент, который будет установлен как содержимое модального окна.
 
 ```typescript
-open(): void
+public open(): void
 ```
 
 Метод для открытия модального окна. Этот метод делает модальное окно видимым и активным.
 
 ```typescript
-close(): void
+public close(): void
 ```
 
 Метод для закрытия модального окна. Этот метод скрывает модальное окно и делает его неактивным.
 
 ```typescript
-render(data: IModalData): HTMLElement
+public render(data: IModalData): HTMLElement
 ```
+Метод для рендеринга состояния модального окна. Этот метод может быть использован для обновления интерфейса в соответствии с текущим состоянием формы.
 
-- data: IModalData - Объект данных для рендеринга модального окна, содержащий HTML-элемент, который будет установлен как содержимое модального окна.
 
 ## Класс Success
 
@@ -764,16 +695,15 @@ constructor(container: HTMLElement, actions: ISuccessActions)
 
 #### Поля
 - _close: HTMLButtonElement  представляет собой HTML-элемент, который используется для закрытия компонента.
-
+- _total: HTMLElement  представляет собой HTML-элемент, который используется для отображения информации об итоговой сумме покупки.
 #### Методы
 
 ```typescript
-render(data: ISuccess): HTMLElement
+public set total(value: string) {
+		this._total.textContent = `Списано ${value} синапсов`;
+	}
 ```
-
-Метод для рендеринга содержимого компонента Success. Этот метод принимает объект данных и возвращает HTML-элемент, представляющий отрендеренный компонент.
-
-- data: ISuccess - Объект данных для рендеринга компонента Success, содержащий общее количество успешных операций.
+Сеттер, который позволяет устанавливать значение, отображаемое в элементе _total. 
 
 ## Класс Card
 
@@ -782,7 +712,6 @@ render(data: ISuccess): HTMLElement
 ```typescript
 constructor(element: HTMLElement, state: ICardActions)
 ```
-
 - element: HTMLElement - HTML-элемент, который будет использоваться в качестве контейнера для компонента Card.
 - state: ICardActions - Объект, содержащий действия, которые могут быть выполнены компонентом Card.
 
@@ -792,87 +721,121 @@ constructor(element: HTMLElement, state: ICardActions)
   - _id: HTMLElement представляет собой HTML-элемент, который используется для хранения идентификатора товара или заказа. 
   - _description?: HTMLElement представляет собой HTML-элемент, который используется для хранения описания товара или заказа.
    - image: HTMLElement представляет собой HTML-элемент типа <img>, который используется для отображения изображения товара.
-   
   - _title: HTMLElement представляет собой HTML-элемент, который используется для хранения названия товара. 
   - _category: HTMLElement представляет собой HTML-элемент, который используется для хранения информации о категории товара. 
   - _price: HTMLElement  представляет собой HTML-элемент, который используется для отображения цены товара.
   - _button: HTMLElement  представляет собой HTML-элемент, который используется для хранения кнопки взаимодействия с товаром. 
   - _index: HTMLElement представляет собой HTML-элемент, который используется для хранения индекса товара в списке.
-  - _flagBtn: boolean представляет собой логическое значение (true или false), которое указывает на состояние кнопки взаимодействия с товаром.
+  - _selected: boolean представляет собой логическое значение (true или false), которое указывает на состояние кнопки взаимодействия с товаром.
 
 #### Методы
 
 ```typescript
-set titleCard(value: string)
+public setTextButton(value: string): void {
+		this.button.textContent = value;
+	}
 ```
-
-Метод для установки заголовка карточки.
-
-- value: string - Значение заголовка карточки.
+Метод устанавливает текстовое содержимое кнопки. 
 
 ```typescript
-get titleCard(): string
+	public get button(): HTMLButtonElement {
+		return this._button;
+	}
 ```
-
-Метод для получения текущего заголовка карточки.
+Геттер, который возвращает приватное свойство _button, представляющее элемент HTMLButtonElement
 
 ```typescript
-set priceCard(value: string)
+public set index(value: string) {
+		this._index.textContent = value;
+	}
 ```
-
-Метод для установки цены карточки.
-
-- value: string - Значение цены карточки.
+Сеттер, который устанавливает значение индекса товара.
 
 ```typescript
-get priceCard(): string
+public get index(): string {
+		return this._index.textContent || '';
+	}
 ```
-
-Метод для получения текущей цены карточки.
+Геттер, возвращает текстовое содержимое элемента, связанного с индексом товара.
 
 ```typescript
-set imageCard(value: string)
+	public set id(value: string) {
+		this.container.dataset.id = value;
+	}
 ```
-
-Метод для установки изображения карточки.
-- value: string - ссылка картинки карточки.
+Сеттер, устанавливает значение атрибута data-id элемента.
 
 ```typescript
-set descriptionCard(value: string)
+public get id(): string {
+		return this.container.dataset.id || '';
+	}
 ```
-
-Метод для установки описания карточки.
-
-- value: string - Описание карточки.
+Геттер, возвращает текущее значение атрибута data-id элемента.
 
 ```typescript
-get descriptionCard(): string
+public set title(value: string) {
+		this.setText(this._title, value);
+	}
 ```
-
-Метод для получения текущего описания карточки.
+Сеттер, устанавливает текстовое содержимое элемента.
 
 ```typescript
-set categoreCard(value: string)
+public get title(): string {
+		return this._title.textContent || '';
+	}
 ```
-
-Метод для установки категории карточки.
-
-- value: string - Категория карточки.
+Геттер, возвращает текущее текстовое содержимое элемента.
 
 ```typescript
-get categoreCard(): string
+public set price(value: string) {
+		value === null
+			? this.setText(this._price, 'Бесценно')
+			: this.setText(this._price, `${value} синапсов`);
+	}
 ```
-
-Метод для получения текущей категории карточки.
+Сеттер, который устанавливает текстовое содержимое элемента, связанного с ценой.
 
 ```typescript
-protected setDescriptionCard(element: HTMLElement, value: unknown)
+public get price(): string {
+		return this._price.textContent || '';
+	}
 ```
+Геттер, возвращает текущее текстовое содержимое элемента.
 
-Защищенный метод для установки описания карточки в указанный HTML-элемент.
+```typescript
+	public set image(value: string) {
+		this.setImage(this._image, value, this.title); 
+	}
+```
+Сеттер,  который устанавливает значения свойства изображения в объекте.
 
-- element: HTMLElement - HTML-элемент для описания.
-- value: unknown - Значение описания.
+```typescript
+	public set description(value: string) {
+		this.setText(this._description, value);
+	}
+```
+Сеттер, используется для установки значения свойства описания в объекте.
+
+
+```typescript
+	public get description(): string {
+		return this._description.textContent || '';
+	}
+```
+Геттер, используется для получения текущего значения свойства описания из объекта.
+
+```typescript
+	public set category(value:keyof typeof ProductsCategories) {
+		this._category.classList.replace(
+			'card__category_soft',
+			ProductsCategories[value]
+		);
+		this.setText(this._category, value);
+	}
+```
+Сеттер, используется для установки значения категории в объекте. 
+
+
 
 ## Класс Contacts
 Класс Contacts предназначен для управления контактной информацией, такой как электронная почта и телефон, и наследуется от класса Form.
@@ -885,64 +848,57 @@ constructor(element: HTMLElement, state: IContacts)
 - state (IContacts): Объект состояния, содержащий начальные данные контактной информации.
 #### Методы
 ```typescript
-set email(value: string)
+public set email(value: string)
 ```
 Метод для установки значения электронной почты в форме контактов. Этот метод позволяет обновить контактную информацию пользователя, задав новое значение электронной почты.
 ```typescript
-set phone(value: string)
+public set phone(value: string)
 ```
 Метод для установки значения телефонного номера в форме контактов. Этот метод позволяет обновить контактную информацию пользователя, задав новое значение телефонного номера.
 
 
 ## Класс Order
-Класс Order предназначен для управления заказами и наследуется от класса Form. Он включает в себя функциональность для обработки различных типов оплаты и адресов доставки.
+Класс Order предназначен для управления заказами и наследуется от класса Form.
 
 ```typescript
-constructor(container: HTMLFormElement, events: IEvents, change: AppStateChanges)
+constructor(container: HTMLFormElement, events: IEvents){}
 ```
 - container (HTMLFormElement): HTML-форма, которая будет использоваться в качестве контейнера для формы заказа.
 - events (IEvents): Интерфейс событий для обработки событий, связанных с формой заказа.
-- change (AppStateChanges): Объект, представляющий изменения состояния приложения.
+
 
 #### Поля
-- _cash: HTMLElement Элемент для выбора оплаты наличными.
-- _card: HTMLElement Элемент для выбора оплаты картой.
-- _paymentTypes: HTMLElement[] Массив HTML-элементов, представляющих различные типы оплаты.
-- _address: HTMLElement[] Массив HTML-элементов, представляющих различные адреса доставки.
+- _cashButton: HTMLButtonElement, HTML-элемент кнопки, который используется для выбора способа оплаты наличными.
+- _cardButton: HTMLButtonElement, HTML-элемент кнопки, который используется для выбора способа оплаты картой.
+- _address: HTMLInputElement, HTML-элемент, который используется для ввода адреса доставки.
 
-#### Методы
-```typescript
-set payment(value: string)
-```
-
-Метод для установки значения типа оплаты в форме заказа. Этот метод позволяет обновить тип оплаты, выбрав между наличными или картой, или другими доступными способами оплаты.
-
-```typescript
-set address(value: string)
-```
-Метод для установки значения адреса доставки в форме заказа. Этот метод позволяет обновить адрес доставки для текущего заказа.
 
 ## Класс Page
 Класс Page предназначен для управления элементами страницы, такими как каталог товаров, корзина покупок и счетчик товаров в корзине. Он наследуется от класса Component.
 ```typescript
-constructor(container: HTMLElement, events: IEvents)
+constructor(container: HTMLElement, protected events: IEvents){}
 ```
  - container: HTMLElement - HTML-элемент, который будет использоваться в качестве контейнера для данной страницы.
   - events: IEvents - Объект для работы с событиями. Этот параметр может использоваться для подписки на события и их обработки.
 #### Поля
-- _catalog: HTMLElement  HTML-элемент, представляющий каталог товаров.
--  _basket: HTMLElement HTML-элемент, представляющий корзину покупок.
-- _cart: HTMLElement HTML-элемент, представляющий карточку товара.
-- _cartCounter: HTMLElement HTML-элемент, представляющий счетчик товаров.
+- _counter: HTMLElement HTMLElement HTML-элемент, представляющий счетчик товаров.
+- _catalog: HTMLElement  HTMLElement  HTML-элемент, представляющий каталог товаров.
+- _wrapper: HTMLElementHTMLElement  HTML-элемент, представляющий обертку страницы.
+- _basket: HTMLElement HTMLElement HTML-элемент, представляющий корзину покупок.
 #### Методы
 ```typescript
-set catalog(items: HTMLElement[]) {}
+public set catalog(items: HTMLElement[]) {}
 ```
-Метод-сеттер для установки элементов каталога.
+Сеттер для установки элементов каталога.
 ```typescript
-set cartCounter(value: number)
+public set counter(value: number){}
 ```
-Метод-сеттер для установки значения счетчика товаров в корзине.
+Сеттер для установки значения счетчика товаров в корзине.
+
+```typescript 
+public set locked(value: boolean) {}
+```
+Сеттер, для блокировки страницы на основе переданного значения.
 
 ## Презентер
 Презентер связывает слой данных (Model) и слой представления (View), обеспечивая их взаимодействие. Взаимодействие осуществляется за счет событий, генерируемых с помощью броекера событий и их обработчиков.
@@ -952,25 +908,19 @@ set cartCounter(value: number)
 - modal:open - открытие модального окна.
 - modal:close - закрытие модального окна.
 
-##### <u> действия с карточкой товара </u>
-- card:select - выбор карточки.
-
-- card:deletefrombasket - удаление карточки из корзины.
-
-- card:addtobasket - добавление карточки в корзину.
 #####  <u> действия с формами </u>
-- order-form:open- открытие формы с товаром.
 
 - basket:open - открытие формы корзины.
-
-- payment:open - открытие формы с выбором способа оплаты и адресом доставки.
-
-- contacts:open - открытие формы контактов.
+- basket:change - изменение корзины.
+- basket:add - добавление карточки товара из корзины.
+- basket:delete - удаление карточки товара из корзины.
 
 #####  <u>  остальные действия </u>
-- form-errors:change - изменение сообщений об ошибках ввода
-
-- payment:take - выбор способа оплаты
-
-- order:submit - подтверждение заказа
+- formErrors:change - изменение сообщений об ошибках ввода.
+- order:select -  обработка выбора заказа пользователя.
+- order:submit - подтверждение заказа.
+- order:ready - готовность заказа.
+- contacts:submit - подтверждение заказа.
+- preview:changed - изменение превью карточки.
+- items:changed - изменение товаров
 

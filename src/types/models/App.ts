@@ -1,10 +1,4 @@
 import { IProduct } from './Api';
-export type ProductCategory =
-	| 'хард-скил'
-	| 'софт-скил'
-	| 'дополнительное'
-	| 'кнопка'
-	| 'другое'
 
 export enum ProductsCategories {
 	'хард-скил' = 'card__category_hard',
@@ -22,7 +16,7 @@ export interface IPage {
     locked: boolean;
 }
 export interface IBasket {
-	itemsBasket: IProduct[]// изменено с этого [IProduct, string, number][];
+	itemsBasket: IProduct[]
 	totalBasket: number | null;
 }
 export interface IContacts {

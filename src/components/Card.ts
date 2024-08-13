@@ -1,5 +1,5 @@
-import { IPostOrder, IProduct } from '../types/models/Api';
-import { ProductCategory, ProductsCategories } from '../types/models/App';
+import { IProduct } from '../types/models/Api';
+import { ProductsCategories } from '../types/models/App';
 import { ensureElement } from '../utils/utils';
 import { Component } from './base/view/Component';
 export type ICardActions = {
@@ -40,9 +40,6 @@ export class Card extends Component<IProduct> {
 		this.button.textContent = value;
 	}
 
-	public get selected(): boolean {
-		return this._selected;
-	}
 	public get button(): HTMLButtonElement {
 		return this._button;
 	}
@@ -75,7 +72,7 @@ export class Card extends Component<IProduct> {
 		return this._price.textContent || '';
 	}
 	public set image(value: string) {
-		this.setImage(this._image, value, this.title); //указать в документации что он из компонента метод сетимадж
+		this.setImage(this._image, value, this.title); 
 	}
 	public set description(value: string) {
 		this.setText(this._description, value);
@@ -83,13 +80,11 @@ export class Card extends Component<IProduct> {
 	public get description(): string {
 		return this._description.textContent || '';
 	}
-	public set category(value: ProductCategory) {
-		//изменено
+	public set category(value:keyof typeof ProductsCategories) {
 		this._category.classList.replace(
 			'card__category_soft',
 			ProductsCategories[value]
 		);
 		this.setText(this._category, value);
 	}
-	//удалено сетпрайс и сетдескриптион и сеткатегори
 }

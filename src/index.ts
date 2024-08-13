@@ -38,9 +38,7 @@ const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
 
 // Переиспользуемые части интерфейса
 const basket = new Basket(cloneTemplate(basketTemplate), events);
-const order = new Order(cloneTemplate(deliveryTemplate), events, {
-    onClickPayment: (ev: Event) => events.emit('payment:toggle', ev.target)
-});
+const order = new Order(cloneTemplate(deliveryTemplate), events);
 const contacts = new Contacts(cloneTemplate(contactTemplate), events);
 
 
@@ -48,10 +46,7 @@ const contacts = new Contacts(cloneTemplate(contactTemplate), events);
 events.on('items:changed', () => {
 	page.catalog = appData._products.map((item) => {
 		const card = new Card(cloneTemplate(cardCatalogTemplate), {
-			onClick: () => {events.emit('preview:changed', item)
-				events.emit('cart:select', item)
-			},
-		});
+			onClick: () => events.emit('preview:changed', item)});
 		return card.render({
 			id: item.id,
 			description: item.description,
@@ -134,7 +129,7 @@ events.on('preview:changed', (item: IProduct) => {
                 events.emit('basket:add', item);
             } else {
                 card.setTextButton('Удалить из корзины');
-                events.emit('card:deletefromcart', item)
+                events.emit('basket:delete', item)
             }
         }
     });
@@ -157,7 +152,7 @@ events.on('basket:add', (item: IProduct) => {
 	page.counter = appData._basket.itemsBasket.length
 	modal.close()
 })
-events.on('card:deletefromcart', (item: IProduct) => {
+events.on('basket:delete', (item: IProduct) => {
 	appData.removeProductInBasket(item);
 	page.counter = appData._basket.itemsBasket.length
 });
@@ -165,7 +160,7 @@ events.on('basket:open', () => {
 	const products = appData._basket.itemsBasket.map((item, index) => {
 		const product = new Card(cloneTemplate(cardBasketTemplate), {
 				onClick: () => {
-					events.emit('card:deletefromcart', item);
+					events.emit('basket:delete', item);
 				},
 			}
 		);
@@ -186,7 +181,7 @@ events.on('basket:change', () => {
 	const products = appData._basket.itemsBasket.map((item, index) => {
 		const product = new Card(cloneTemplate(cardBasketTemplate), {
 				onClick: () => {
-					events.emit('card:deletefromcart', item);
+					events.emit('basket:delete', item);
 				},
 			}
 		);

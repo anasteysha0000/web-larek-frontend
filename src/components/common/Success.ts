@@ -27,7 +27,7 @@ export class Success extends Component<ISuccess> {
 			this._close.addEventListener('click', actions.onClick);
 		}
 	}
-	set total(value: string) {
+	public set total(value: string) {
 		this._total.textContent = `Списано ${value} синапсов`;
 	}
 }

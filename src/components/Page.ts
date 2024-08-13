@@ -21,15 +21,14 @@ export class Page extends Component<IPage> {
             this.events.emit('basket:open'); // событие
         });
     }
-
-    public set counter(value: number) {
-        this.setText(this._counter, String(value));
-    }
-
     public set catalog(items: HTMLElement[]) {
         this._catalog.replaceChildren(...items);
     }
 
+    public set counter(value: number) {
+        this.setText(this._counter, String(value));
+    }
+    
     public set locked(value: boolean) {
         if (value) {
             this._wrapper.classList.add('page__wrapper_locked');

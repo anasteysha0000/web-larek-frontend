@@ -6,7 +6,7 @@ import { Form } from './common/Form';
 export class Order extends Form<IOrder> {
 	protected _cashButton: HTMLButtonElement;
 	protected _cardButton: HTMLButtonElement;
-	public _address: HTMLInputElement; //изменено
+	protected _address: HTMLInputElement; 
 	constructor(
 		container: HTMLFormElement,
 		events: IEvents,

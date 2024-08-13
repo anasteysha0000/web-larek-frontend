@@ -1,12 +1,9 @@
 import { IProduct } from '../types/models/Api';
 import {
 	FormErrors,
-	IAddress,
 	IBasket,
-	IContacts,
 	IOrder,
 	IOrderForms,
-	ProductPayment,
 } from '../types/models/App';
 import { IEvents } from './base/view/Events';
 import { Model } from './base/view/Model';
@@ -32,33 +29,21 @@ export class AppData extends Model<IAppState> {
 		itemsBasket: [],
 		totalBasket: 0,
 	};
-	public _preview: IProduct = null; //поменять в документации, и спросить у коли что это??
+	public _preview: IProduct = null; 
 	public _formErrors: FormErrors = {};
 	constructor(data: object, events: IEvents) {
 		super(data, events);
 	}
-
-	public setProducts(items: IProduct[]) {
-		//поменять в документации setProducts(items: IProduct[])
+	public setProducts(items: IProduct[]): void {
 		this._products = items;
-		this.emitChanges('items:changed', this._products); //поменять в документации
+		this.emitChanges('items:changed', this._products); 
 	}
-	public setPreview(items: IProduct) {
-		//поменять в документации
+	public setPreview(items: IProduct): void {
 		this._preview = items;
-		this.emitChanges('preview:change', this._preview); //поменять в документации
+		this.emitChanges('preview:change', this._preview); 
 	}
 
-	public setContacts(email: string, phone: string) {
-		//надо ли? как будто нет, потому что они не устанавливаются, а вводятся пользователем
-		this._order.email = email;
-		this._order.phone = phone;
-	}
-	public setPayment(type: ProductPayment) {
-		this._order.payment = type;
-	}
-
-	public addProductToBasket(product: IProduct) {
+	public addProductToBasket(product: IProduct): void {
 		this._basket.itemsBasket.push(product);
 		this._basket.totalBasket += product.price as number;
 		this.emitChanges('basket:change', this._basket);
@@ -77,7 +62,7 @@ export class AppData extends Model<IAppState> {
 		});
 		return have;
 	}
-	public isProductInBasket(product: IProduct) {
+	public isProductInBasket(product: IProduct): boolean {
 		const exists = this._basket.itemsBasket.some(
 			(item) => item.id === product.id
 		);
@@ -86,7 +71,6 @@ export class AppData extends Model<IAppState> {
 		}
 	}
 	public getTotal() {
-		//добавлено
 		if (this.isBasketHaveProductPriceless()) {
 			return 'Бесценно';
 		}
@@ -96,7 +80,7 @@ export class AppData extends Model<IAppState> {
 		);
 	}
 
-	public removeProductInBasket(product: IProduct) {
+	public removeProductInBasket(product: IProduct): void {
 		if (this._basket.itemsBasket.indexOf(product) > -1) {
 			this._basket.itemsBasket.splice(
 				this._basket.itemsBasket.indexOf(product),
@@ -106,7 +90,7 @@ export class AppData extends Model<IAppState> {
 			this.emitChanges('basket:change', this._basket);
 		}
 	}
-	public clearBasket() {
+	public clearBasket(): void {
 		this._basket.itemsBasket = [];
 		this._basket.totalBasket = 0;
 		this.emitChanges('basket:change', this._basket);
@@ -115,7 +99,6 @@ export class AppData extends Model<IAppState> {
 		field: keyof IOrder,
 		errorMessage: string
 	): boolean {
-		//добавить в документацию
 		if (!this._order[field]) {
 			this._formErrors[field] = errorMessage;
 			return false;
@@ -138,7 +121,7 @@ export class AppData extends Model<IAppState> {
 		return true;
 	}
 
-	private isOrderValidForm() {
+	private isOrderValidForm(): boolean {
 		if (this.validateEmptyField('address', 'Необходимо указать адрес')) {
 			this.validateFieldRegex(
 				'email',
@@ -167,7 +150,7 @@ export class AppData extends Model<IAppState> {
 		return Object.keys(this._formErrors).length === 0;
 	}
 
-	public setOrderField(field: keyof IOrderForms, value: string) {
+	public setOrderField(field: keyof IOrderForms, value: string): void{
 		this._order[field] = value;
 		if (this.isOrderValidForm()) {
 			this.emitChanges('order:ready', this._order);
