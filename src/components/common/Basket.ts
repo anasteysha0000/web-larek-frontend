@@ -2,7 +2,6 @@ import { createElement, ensureElement } from '../../utils/utils';
 import { Component } from '../base/view/Component';
 import { EventEmitter } from '../base/view/Events';
 
-
 interface IBasketView {
 	products: HTMLElement[];
 	total: number | string;
@@ -14,34 +13,38 @@ export class Basket extends Component<IBasketView> {
 
 	constructor(container: HTMLElement, protected events: EventEmitter) {
 		super(container);
-		this._products = ensureElement<HTMLElement>('.basket__list', this.container);
-		this._total =container.querySelector('.basket__price');
-		this._button = container.querySelector('.basket__button')
+		this._products = ensureElement<HTMLElement>(
+			'.basket__list',
+			this.container
+		);
+		this._total = container.querySelector('.basket__price');
+		this._button = container.querySelector('.basket__button');
 
-		if (this._button){
-			this._button.addEventListener('click',()=>{
+		if (this._button) {
+			this._button.addEventListener('click', () => {
 				events.emit('order:select');
-			})
+			});
 		}
 	}
-	set products(products: HTMLElement[]) {
+	public set products(products: HTMLElement[]) {
 		if (products.length) {
-			this._products.replaceChildren(...products)
+			this._products.replaceChildren(...products);
 			this._button.disabled = false;
 		} else {
 			this._button.disabled = true;
-			this._products.replaceChildren(createElement<HTMLParagraphElement>('p', {
-				textContent: 'Корзина пуста'
-			}));
+			this._products.replaceChildren(
+				createElement<HTMLParagraphElement>('p', {
+					textContent: 'Корзина пуста',
+				})
+			);
 		}
 	}
-	set total(total: number | string) {
+	public set total(total: number | string){
 		if (typeof total === 'string') {
 			this._button.disabled = true;
-			this.setText(this._total, 'Стоимость заказа слишком высока')
+			this.setText(this._total, 'Стоимость заказа слишком высока');
 		} else {
-			this._button.disabled = false;
-			this.setText(this._total,`${total} синапсов`);
+			this.setText(this._total, `${total} синапсов`);
 		}
 	}
 }

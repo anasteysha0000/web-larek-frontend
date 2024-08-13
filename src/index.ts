@@ -3,7 +3,6 @@
 import './scss/styles.scss';
 import { AppData } from './components/AppData';
 import { EventEmitter } from './components/base/view/Events';
-import { Model } from './components/base/view/Model';
 import { Card } from './components/Card';
 import { Basket } from './components/common/Basket';
 import { Modal } from './components/common/Modal';
@@ -130,16 +129,16 @@ events.on('contacts:submit', () => {
 events.on('preview:changed', (item: IProduct) => {
     const card = new Card(cloneTemplate(cardPreviewTemplate), {
         onClick: () => {
-			if (appData.isProductInBasket) {
-                card.setTextq('В корзину');
+			if (appData.isProductInBasket(item)) {
+                card.setTextButton('В корзину');
                 events.emit('basket:add', item);
             } else {
-                card.setTextq('Удалить из корзины');
-                events.emit('card:deletefromcart', item);
+                card.setTextButton('Удалить из корзины');
+                events.emit('card:deletefromcart', item)
             }
         }
     });
-	appData.isProductInBasket ? card.setTextq('В корзину'):card.setTextq('Удалить из корзины');
+	appData.isProductInBasket(item) ? card.setTextButton('В корзину'):card.setTextButton('Удалить из корзины');
     return modal.render({
         content: card.render({
             id: item.id,
@@ -157,7 +156,6 @@ events.on('basket:add', (item: IProduct) => {
 	appData.addProductToBasket(item);
 	page.counter = appData._basket.itemsBasket.length
 	modal.close()
-	
 })
 events.on('card:deletefromcart', (item: IProduct) => {
 	appData.removeProductInBasket(item);

@@ -43,23 +43,5 @@ export interface IAddress{
 	payment: string;
 	address: string;
 }
-
 export type FormErrors = Partial<Record<keyof IOrder, string>>;
-// Какие модальные окна у нас есть
-export enum AppStateModals {
-	product = 'modal:product',
-	basket = 'modal:basket',
-	payment = 'modal:payment',
-	contacts = 'modal:contacts',
-	postOrder = 'modal:postOrder',
-}
-// Какие изменения состояния приложения могут происходить
-export enum AppStateChanges {
-	products = 'change:products',
-	modal = 'change:modal',
-	modalMessage = 'change:modalMessage',
-	selectedProduct = 'change:selectedProduct',
-	basket = 'change:basket',
-	order = 'change:order',
-	
-}
+//удалены enumы

@@ -22,15 +22,15 @@ export class Page extends Component<IPage> {
         });
     }
 
-    set counter(value: number) {
+    public set counter(value: number) {
         this.setText(this._counter, String(value));
     }
 
-    set catalog(items: HTMLElement[]) {
+    public set catalog(items: HTMLElement[]) {
         this._catalog.replaceChildren(...items);
     }
 
-    set locked(value: boolean) {
+    public set locked(value: boolean) {
         if (value) {
             this._wrapper.classList.add('page__wrapper_locked');
         } else {
