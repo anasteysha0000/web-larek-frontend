@@ -81,10 +81,12 @@ export class Card extends Component<IProduct> {
 		return this._description.textContent || '';
 	}
 	set category(value: keyof typeof ProductsCategories) {
-		this._category.classList.replace(
-			'card__category_soft',
-			ProductsCategories[value]
-		);
+		const classes = Array.from(this._category.classList);
+		const oldCategoryClass = classes.find(cls => cls.startsWith('card__category_'));
+		if (oldCategoryClass) {
+			this._category.classList.remove(oldCategoryClass);
+		}
+		this._category.classList.add(ProductsCategories[value]);
 		this.setText(this._category, value);
 	}
 }

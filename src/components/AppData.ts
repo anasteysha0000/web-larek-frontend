@@ -18,7 +18,7 @@ export interface IAppState {
 export class AppData extends Model<IAppState> {
 	public _products: IProduct[];
 	public _order: IOrder = {
-		payment: 'online',
+		payment: '',
 		email: '',
 		phone: '',
 		address: '',
