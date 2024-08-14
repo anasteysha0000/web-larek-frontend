@@ -710,7 +710,7 @@ constructor(container: HTMLElement, actions: ISuccessActions)
 
 ```typescript
 set total(value: string) {
-		this._total.textContent = `Списано ${value} синапсов`;
+		this.setText(_total, `Списано ${value} синапсов`);
 	}
 ```
 Сеттер, который позволяет устанавливать значение, отображаемое в элементе _total. 
@@ -742,7 +742,7 @@ constructor(element: HTMLElement, state: ICardActions)
 
 ```typescript
 public setTextButton(value: string): void {
-		this.button.textContent = value;
+	this.setText(_button, value);
 	}
 ```
 Метод устанавливает текстовое содержимое кнопки. 
@@ -756,7 +756,7 @@ public setTextButton(value: string): void {
 
 ```typescript
  set index(value: string) {
-		this._index.textContent = value;
+		this.this.setText(_index, value);
 	}
 ```
 Сеттер, который устанавливает значение индекса товара.

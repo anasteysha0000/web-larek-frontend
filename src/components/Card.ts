@@ -37,14 +37,14 @@ export class Card extends Component<IProduct> {
 		}
 	}
 	public setTextButton(value: string): void {
-		this.button.textContent = value;
+		this.setText(this._button, value);
 	}
 
 	get button(): HTMLButtonElement {
 		return this._button;
 	}
 	set index(value: string) {
-		this._index.textContent = value;
+		this.setText(this._index, value);
 	}
 
 	get index(): string {
